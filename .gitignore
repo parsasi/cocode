@@ -40,9 +40,6 @@ public/.pnp
 # testing
 public/coverage
 
-# production
-#public/build
-
 # misc
 .env
 .DS_Store
@@ -50,3 +47,6 @@ public/coverage
 .env.development.local
 .env.test.local
 .env.production.local
+
+#database connection script
+/database/connect.sh
