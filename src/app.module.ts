@@ -16,7 +16,6 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(FrontendMiddleware)
-      .exclude('api/')
-      .forRoutes('*');
+      .forRoutes(FrontendController);
   }
 }

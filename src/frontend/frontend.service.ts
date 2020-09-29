@@ -9,7 +9,7 @@ export class FrontendService {
 
     public async getApp() : Promise<string>{
         const basePath = this.configService.get('CLIENT_BUILD_PATH');
-        const filePath = path.resolve(path.join(basePath, 'index.html'));
+        const filePath = path.resolve(basePath, 'index.html');
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf8', (err: NodeJS.ErrnoException, data: string) => {
               if (err) {
@@ -22,7 +22,7 @@ export class FrontendService {
     }
 
     public getAssetPath(url: any) : string {
-        const basePath = this.configService.get('CLIENT_BUILD_PATH');
+        const basePath = path.join(this.configService.get('CLIENT_BUILD_PATH'));
         return path.join(basePath, url);
     }
 }
