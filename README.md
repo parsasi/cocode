@@ -2,12 +2,8 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
+  <!--
+  <p align="center">A tutoring application, for those who want to be the best!</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
@@ -21,17 +17,19 @@
   <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
   <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[CoCode](https://github.com/parsasi/cocode) Development tutoring, revamped!
 
 ## Installation
 
 ```bash
 $ npm install
+$ cd /public npm install
+$ npm run build
 ```
 
 ## Running the app
@@ -39,11 +37,17 @@ $ npm install
 ```bash
 # development
 $ npm run start
+$ cd /public npm start
+
 
 # watch mode
 $ npm run start:dev
+$ cd /public npm start
+
 
 # production mode
+$ cd /public npm install
+$ npm run build
 $ npm run start:prod
 ```
 
@@ -62,14 +66,15 @@ $ npm run test:cov
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+CoCode is an MIT-licensed open source project. Support us by staring our repo!
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Developer - [Parsa Safavi](http://parsa.pro)
+- Designer/Developer - [Jordan Naranja](https://bcit.ca/)
+- Designer/Developer - [Megan Holmes](https://bcit.ca/)
+- Designer/Developer - [Yunyun Peng](https://bcit.ca/)
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+CoCode is [MIT licensed](LICENSE).
