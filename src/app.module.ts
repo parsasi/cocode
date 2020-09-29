@@ -8,6 +8,8 @@ import { FrontendMiddleware } from './common/middlewares/frontendMiddleware'
 import { FrontendService } from './frontend/frontend.service'
 import { FrontendController } from './frontend/frontend.controller'
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
+import { TutorModule } from './tutor/tutor.module';
 
 
 @Module({
@@ -25,9 +27,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: configService.get('mysql_dbname'),
         entities: [],
         synchronize: true,
+        autoLoadEntities: true,
       }),
       inject: [ConfigService],
-    })],
+    }),
+    UserModule,
+    TutorModule],
   controllers: [AppController , FrontendController],
   providers: [AppService , FrontendService],
 })
