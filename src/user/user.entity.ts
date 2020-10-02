@@ -1,6 +1,5 @@
 
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn , OneToOne } from 'typeorm';
-import {Tutor} from '../tutor/tutor.entity'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -27,10 +26,6 @@ export class User {
 
   @Column({unique: true})
   username: string;
-
-  @OneToOne(type => Tutor)
-  @JoinColumn()
-  tutor: Tutor;
 
   @Column({default : false})
   isBanned : boolean;
