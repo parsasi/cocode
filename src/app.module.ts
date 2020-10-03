@@ -9,7 +9,8 @@ import { FrontendService } from './frontend/frontend.service'
 import { FrontendController } from './frontend/frontend.controller'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { TutorModule } from './tutor/tutor.module';
+import { CategoryModule } from './category/category.module';
+import { RatingModule } from './rating/rating.module';
 
 
 @Module({
@@ -32,7 +33,8 @@ import { TutorModule } from './tutor/tutor.module';
       inject: [ConfigService],
     }),
     UserModule,
-    TutorModule],
+    CategoryModule,
+    RatingModule],
   controllers: [AppController , FrontendController],
   providers: [AppService , FrontendService],
 })
