@@ -20,11 +20,8 @@ export class UserService {
         return this.userRepository.insert(newUser)
     }
 
-    async getUserByEmail(email : string) : Promise<User | HttpException>{
-        const user = await this.userRepository.findOne({
-            select : ["email" , "username" , "hashedPassword"],
-            where : [{email}]
-        })
+    async getUserByEmail(email : string) : Promise<User>{
+        const user = await this.userRepository.findOne({email})
         if(user)
             return user
         else

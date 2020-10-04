@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -37,7 +38,8 @@ import { BcryptModule } from './bcrypt/bcrypt.module';
     UserModule,
     CategoryModule,
     RatingModule,
-    BcryptModule],
+    BcryptModule,
+    AuthModule],
   controllers: [AppController , FrontendController],
   providers: [AppService , FrontendService],
 })

@@ -9,7 +9,7 @@ import { BcryptModule } from '../bcrypt/bcrypt.module'
 
 @Module({
     imports : [TypeOrmModule.forFeature([User , Transaction , Tutor]) , BcryptModule],
-    exports : [TypeOrmModule],
+    exports : [TypeOrmModule , UserService],
     providers: [UserService],
     controllers: [UserController]
 })
