@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , OneToOne , JoinColumn } from 'typeorm';
+import {User} from './user.entity'
 
 @Entity()
 export class Tutor {
@@ -20,4 +21,9 @@ export class Tutor {
 
   @Column()
   profileVideo : string;
+
+
+  @OneToOne(type => User)
+  @JoinColumn()
+  user: User;
 }

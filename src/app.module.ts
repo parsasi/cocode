@@ -9,7 +9,10 @@ import { FrontendService } from './frontend/frontend.service'
 import { FrontendController } from './frontend/frontend.controller'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { TutorModule } from './tutor/tutor.module';
+import { CategoryModule } from './category/category.module';
+import { RatingModule } from './rating/rating.module';
+import { BcryptModule } from './bcrypt/bcrypt.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -28,11 +31,15 @@ import { TutorModule } from './tutor/tutor.module';
         entities: [],
         synchronize: true,
         autoLoadEntities: true,
+        keepConnectionAlive : false
       }),
       inject: [ConfigService],
     }),
     UserModule,
-    TutorModule],
+    CategoryModule,
+    RatingModule,
+    BcryptModule,
+    AuthModule],
   controllers: [AppController , FrontendController],
   providers: [AppService , FrontendService],
 })
