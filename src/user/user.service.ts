@@ -14,9 +14,10 @@ export class UserService {
     ){}
 
     async createUser(user) : Promise<InsertResult> {
-        const hashedPassword = await this.bcryptService.hash(user.hashedPassword);
+        const hashedPassword = await this.bcryptService.hash(user.password)
+        delete user.password
         const newUser = {...user , hashedPassword} 
-        return this.userRepository.insert(newUser);
+        return this.userRepository.insert(newUser)
     }
 
     async getUserByEmail(email : string) : Promise<User | HttpException>{

@@ -6,7 +6,7 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
-  hashedPassword: string;
+  password: string;
 
 
   @IsNotEmpty()
