@@ -5,10 +5,11 @@ import { Transaction } from './transaction.entity'
 import { Tutor } from './tutor.entity'
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
+import { BcryptModule } from '../bcrypt/bcrypt.module'
 
 @Module({
-    imports : [TypeOrmModule.forFeature([User , Transaction , Tutor])],
-    exports : [TypeOrmModule],
+    imports : [TypeOrmModule.forFeature([User , Transaction , Tutor]) , BcryptModule],
+    exports : [TypeOrmModule , UserService],
     providers: [UserService],
     controllers: [UserController]
 })

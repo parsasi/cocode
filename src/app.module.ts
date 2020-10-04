@@ -11,6 +11,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
+import { BcryptModule } from './bcrypt/bcrypt.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -29,12 +31,15 @@ import { RatingModule } from './rating/rating.module';
         entities: [],
         synchronize: true,
         autoLoadEntities: true,
+        keepConnectionAlive : false
       }),
       inject: [ConfigService],
     }),
     UserModule,
     CategoryModule,
-    RatingModule],
+    RatingModule,
+    BcryptModule,
+    AuthModule],
   controllers: [AppController , FrontendController],
   providers: [AppService , FrontendService],
 })

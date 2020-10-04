@@ -50,3 +50,6 @@ public/coverage
 
 #database connection script
 /database/connect.sh
+
+#Jwt Token
+/src/auth/constant.ts
