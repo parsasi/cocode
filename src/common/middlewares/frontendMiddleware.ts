@@ -7,7 +7,6 @@ import * as path from 'path'
 export class FrontendMiddleware implements NestMiddleware {
   constructor(private readonly frontendService: FrontendService) {}
   async use(req: Request, res: Response, next: () => void) {
-    console.log('here')
     if (/[^\\/]+\.[^\\/]+$/.test(req.path)) {
       const file = path.join(this.frontendService.getAssetPath(req.path));
       res.sendFile(file , {root : path.join(__dirname , '../../../')} , (err) => {
