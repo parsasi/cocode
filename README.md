@@ -6,6 +6,10 @@
 
 [CoCode](https://github.com/parsasi/cocode) Development tutoring, revamped!
 
+
+## API Documentation
+Visit [CoCode on Postman](https://documenter.getpostman.com/view/2284249/TVRg89xQ) to see a comprehensive documentation of the API endpoints.
+
 ## Installation
 
 ```bash
