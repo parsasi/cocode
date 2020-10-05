@@ -13,7 +13,7 @@ export class AppController {
     return this.authService.login(req.user);
   }
 
-  //Example of a authenticated route 
+  //Example of an authenticated route 
   @UseGuards(JwtAuthGuard)
   @Get('auth/test')
   async isAuthed() {

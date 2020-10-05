@@ -15,4 +15,10 @@ describe('UserService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+
+  it('getUserByUsername should return a user or a falsy value' , () => {
+    expect(service.getUserByUsername('parsasi')).toBeTruthy()
+    expect(service.getUserByUsername('SomethingThatDoesnotExist')).toBeFalsy()
+  })
 });
