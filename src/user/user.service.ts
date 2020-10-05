@@ -21,10 +21,15 @@ export class UserService {
     }
 
     async getUserByEmail(email : string) : Promise<User>{
-        const user = await this.userRepository.findOne({email})
+        const user : User = await this.userRepository.findOne({email})
         if(user)
             return user
         else
             new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
+    }
+
+    async getUserByUsername(username : string) : Promise<User | void>{
+        const user : User  = await this.userRepository.findOne({username})
+        return user
     }
 }

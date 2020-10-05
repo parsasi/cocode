@@ -13,11 +13,10 @@ import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
-
+import { UserController } from './user/user.controller'
 
 @Module({
   imports: [
-    FrontendModule,
     ConfigModule.forRoot({isGlobal: true,}),
     TypeOrmModule.forRootAsync({
       imports : [ConfigModule],
@@ -39,8 +38,10 @@ import { AuthModule } from './auth/auth.module';
     CategoryModule,
     RatingModule,
     BcryptModule,
-    AuthModule],
-  controllers: [AppController , FrontendController],
+    AuthModule,
+    FrontendModule,
+  ],
+  controllers: [AppController],
   providers: [AppService , FrontendService],
 })
 export class AppModule {
