@@ -13,7 +13,6 @@ import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
-import { UserController } from './user/user.controller'
 
 @Module({
   imports: [
