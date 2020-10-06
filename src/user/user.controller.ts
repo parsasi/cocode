@@ -21,10 +21,7 @@ export class UserController {
         else
             user = await this.userService.getUserByEmail(userExistsDto.email)
         
-        if(user)
-            return {userExist : true}
-        else
-            return {userExist : false}
+        return user ? {exists : true} : {exists : false}
     }
     
 }

@@ -22,7 +22,6 @@ export class Tutor {
   @Column()
   profileVideo : string;
 
-
   @OneToOne(type => User)
   @JoinColumn()
   user: User;

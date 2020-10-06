@@ -6,11 +6,12 @@ import { Tutor } from './tutor.entity'
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { BcryptModule } from '../bcrypt/bcrypt.module'
+import { TutorService } from './tutor.service'
 
 @Module({
     imports : [TypeOrmModule.forFeature([User , Transaction , Tutor]) , BcryptModule],
     exports : [TypeOrmModule , UserService],
-    providers: [UserService],
+    providers: [UserService , TutorService],
     controllers: [UserController]
 })
 export class UserModule {}
