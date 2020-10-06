@@ -1,8 +1,8 @@
 import { Controller  , Post , Body, Get, Query , HttpStatus } from '@nestjs/common';
-import {UserService} from './user.service'
+import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
-import { UserExistsDto } from './dto/userExistsDto'
-
+import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
+import { User } from './user.entity'
 
 @Controller('user')
 export class UserController {
@@ -14,14 +14,14 @@ export class UserController {
     }
 
     @Get('/exists')
-    async userWithUsernameExist(@Query() userExistsDto : UserExistsDto){
-        const user = this.userService.getUserByUsername(userExistsDto.username)
-        if(user)
-            //User found
-            return HttpStatus.OK
+    async userExists(@Query() userExistsDto : UserExistsUsernameDto | UserExistsEmailDto){
+        let user : User | void;
+        if('username' in userExistsDto)
+            user = await this.userService.getUserByUsername(userExistsDto.username)
         else
-            //User not found
-            return HttpStatus.I_AM_A_TEAPOT
+            user = await this.userService.getUserByEmail(userExistsDto.email)
+        
+        return user ? {exists : true} : {exists : false}
     }
     
 }

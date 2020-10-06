@@ -20,7 +20,7 @@ export class UserService {
         return this.userRepository.insert(newUser)
     }
 
-    async getUserByEmail(email : string) : Promise<User>{
+    async getUserByEmailLogin(email : string) : Promise<User>{
         const user : User = await this.userRepository.findOne({email})
         if(user)
             return user
@@ -30,6 +30,11 @@ export class UserService {
 
     async getUserByUsername(username : string) : Promise<User | void>{
         const user : User  = await this.userRepository.findOne({username})
+        return user
+    }
+
+    async getUserByEmail(email : string) : Promise<User>{
+        const user : User = await this.userRepository.findOne({email})
         return user
     }
 }
