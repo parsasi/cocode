@@ -1,7 +1,14 @@
 
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty , IsEmail } from 'class-validator';
 
-export class UserExistsDto {
+export class UserExistsUsernameDto {
   @IsNotEmpty()
   username: string;
+}
+
+
+export class UserExistsEmailDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 }
