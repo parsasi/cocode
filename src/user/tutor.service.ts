@@ -20,4 +20,5 @@ export class TutorService {
     async createTutor(user : User) : Promise<InsertResult>{
         return await this.tutorRepository.insert({user})
     }
+
 }

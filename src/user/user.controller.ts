@@ -1,12 +1,17 @@
-import { Controller  , Post , Body, Get, Query , HttpStatus } from '@nestjs/common';
+import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus } from '@nestjs/common';
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
 import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
 import { User } from './user.entity'
+import { TutorService } from './tutor.service'
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Controller('user')
 export class UserController {
-    constructor(private userService : UserService){}
+    constructor(
+        private userService : UserService,
+        private tutorService : TutorService
+    ){}
 
     @Post('/create')
     async createUser(@Body() createUserDto : CreateUserDto){
@@ -22,6 +27,13 @@ export class UserController {
             user = await this.userService.getUserByEmail(userExistsDto.email)
         
         return user ? {exists : true} : {exists : false}
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/tutor/create')
+    async createTutor(@Request() req){
+        const user : User | void = await this.userService.getUserByUsername(req.user.username)
+        return user ? await this.tutorService.createTutor(user) : HttpStatus.NOT_FOUND
     }
     
 }
