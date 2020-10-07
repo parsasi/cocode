@@ -11,10 +11,13 @@ export class TutorService {
         private tutorRepository : Repository<Tutor>
     ){}
     
-    async getTutor(userId) : Promise<Tutor | void >{
+    async getTutor(tutor) : Promise<Tutor | void >{
+
+        //To get the tutor for a specific user, pass in {user : {id : userId }} as your tutor object
+
         return await this.tutorRepository.findOne({
-                    where : {user : {id : userId }}
-            })
+                    where : {tutor}
+        })
     }
 
     async createTutor(user : User) : Promise<InsertResult>{
