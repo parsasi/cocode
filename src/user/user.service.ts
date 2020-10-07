@@ -38,9 +38,9 @@ export class UserService {
         return user
     }
 
-    async editUser(user : User ) : Promise<User> {
-        let userToUpdate  = await this.userRepository.findOne(user)
-        userToUpdate = {...userToUpdate , ...user}
-        return await this.userRepository.save(userToUpdate)
+    async editUser(user , id : number) : Promise<User> {
+        const userToUpdate  = await this.userRepository.findOne({id})
+        user = {...userToUpdate , ...user}
+        return await this.userRepository.save(user)
     }
 }
