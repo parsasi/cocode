@@ -1,4 +1,5 @@
-import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus } from '@nestjs/common';
+import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res} from '@nestjs/common';
+import { Response } from 'express'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
 import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
@@ -31,9 +32,13 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @Post('/tutor/create')
-    async createTutor(@Request() req){
+    async createTutor(@Request() req , @Res() res: Response){
+        //fetching the user associated with the tutor
         const user : User | void = await this.userService.getUserByUsername(req.user.username)
-        return user ? await this.tutorService.createTutor(user) : HttpStatus.NOT_FOUND
+        if(user){
+            return await this.tutorService.createTutor(user)
+        }
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
     }
     
 }
