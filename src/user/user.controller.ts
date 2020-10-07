@@ -1,4 +1,4 @@
-import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res} from '@nestjs/common';
+import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res, Put} from '@nestjs/common';
 import { Response } from 'express'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
@@ -6,6 +6,7 @@ import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
 import { User } from './user.entity'
 import { TutorService } from './tutor.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { EditUserDto } from './dto/editUserDto'
 
 @Controller('user')
 export class UserController {
@@ -39,6 +40,14 @@ export class UserController {
             return await this.tutorService.createTutor(user)
         }
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('/')
+    async editUser(@Body() editUserDto : EditUserDto ,  @Request() req , @Res() res : Response){
+        const userUpdate =  await this.userService.editUser(editUserDto , req.user.sub)
+
+        return userUpdate ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
     
 }
