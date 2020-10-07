@@ -1,5 +1,5 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , ManyToMany , JoinTable , OnetoOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , ManyToMany , JoinTable , OneToOne } from 'typeorm';
 import { Category } from '../category/category.entity'
 import { Tutor } from './tutor.entity'
 
@@ -42,7 +42,7 @@ export class User {
   @JoinTable()
   categories: Category[]
 
-  @OnetoOne(type => Tutor , tutor => tutor.user)
+  @OneToOne(type => Tutor , tutor => tutor.user)
   tutor : Tutor;
 
 }
