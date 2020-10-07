@@ -1,5 +1,6 @@
 
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { All } from '@nestjs/common';
+import { IsEmail, IsNotEmpty , Allow } from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
@@ -19,4 +20,10 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   lastName: string;
+
+  @Allow()
+  profilePhoto: string;
+
+  @Allow()
+  isAcceptedTerms: boolean;
 }
