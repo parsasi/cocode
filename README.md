@@ -5,50 +5,18 @@
 ## Description
 
 [CoCode](https://github.com/parsasi/cocode) Development tutoring, revamped!
+CoCode is an online tutoring platform, that helps anyone from anywhere, find a tutor they like and get help from them, work on some code collaboratively. CoCode aims to give everyone a seemless experience, bypassing any location barrier.
+
+## Technologies
+- Backend: NodeJs/ Typescript /NestJs/ Web Sockets
+- Frontend: Bootstrap 4.0 / React Js / Redux Js 
+- Database: MySql / TypeORM
+- Other packages used: PassportJs /  WebRTC / Socket.IO / React Testing Library / Create React App
 
 
 ## API Documentation
 Visit [CoCode on Postman](https://documenter.getpostman.com/view/2284249/TVRg89xQ) to see a comprehensive documentation of the API endpoints.
 
-## Installation
-
-```bash
-$ npm install
-$ cd /public npm install
-$ npm run build
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-$ cd /public npm start
-
-
-# watch mode
-$ npm run start:dev
-$ cd /public npm start
-
-
-# production mode
-$ cd /public npm install
-$ npm run build
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
 
 ## Support
 
@@ -62,5 +30,4 @@ CoCode is an MIT-licensed open source project. Support us by staring our repo!
 - Designer/Developer - [Yunyun Peng](https://bcit.ca/)
 
 ## License
-
 CoCode is [MIT licensed](LICENSE).
