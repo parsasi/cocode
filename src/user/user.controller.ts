@@ -4,7 +4,6 @@ import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
 import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
 import { User } from './user.entity'
-import { Tutor } from './tutor.entity'
 import { TutorService } from './tutor.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
@@ -37,9 +36,7 @@ export class UserController {
         //fetching the user associated with the tutor
         const user : User | void = await this.userService.getUserByUsername(req.user.username)
         if(user){
-            //Checking if a row already exists
-            const tutor : Tutor | void = await this.tutorService.getTutor(user.id)
-            return !tutor ? await this.tutorService.createTutor(user) : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
+            return await this.tutorService.createTutor(user)
         }
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
     }

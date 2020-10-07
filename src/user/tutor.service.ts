@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Tutor } from './tutor.entity'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository , InsertResult } from 'typeorm'
+import { Repository , InsertResult  } from 'typeorm'
 import { User } from './user.entity'
 
 @Injectable()
@@ -19,6 +19,6 @@ export class TutorService {
 
     async createTutor(user : User) : Promise<InsertResult>{
         return await this.tutorRepository.insert({user})
-    }
+    }   
 
 }
