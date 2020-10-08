@@ -14,9 +14,11 @@ export class AuthService {
 
     async authenticate(email : string , password : string) : Promise<any> {
         const user = await this.userService.getUserByEmailLogin(email)
-        if(await this.bcryptService.BcryptCompare(password , user.hashedPassword)){
-            delete user.hashedPassword
-            return user
+        if(user){
+            if(await this.bcryptService.BcryptCompare(password , user.hashedPassword)){
+                delete user.hashedPassword
+                return user
+            }
         }
         return null
     }

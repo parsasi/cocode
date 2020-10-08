@@ -17,4 +17,12 @@ export class CategoryService {
     async getAllCategories() : Promise<Category[]>{
         return await this.categoryRepository.find()
     }
+
+    async getCategoryForSearch(searchTerm : string) : Promise<Category[]>{
+        return await this
+        .categoryRepository
+        .createQueryBuilder('category')
+        .where("category.text like :text", { text:`%${searchTerm}%` })
+        .getMany()
+    }
 }
