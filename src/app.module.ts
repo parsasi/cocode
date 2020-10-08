@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FrontendModule } from './frontend/frontend.module';
 import { ConfigModule } from '@nestjs/config';
-import { ConfigService } from '@nestjs/config';
 import { FrontendMiddleware } from './common/middlewares/frontendMiddleware'
 import { FrontendService } from './frontend/frontend.service'
 import { FrontendController } from './frontend/frontend.controller'
@@ -17,26 +16,13 @@ import { TutorService } from './user/tutor.service';
 import { APP_INTERCEPTOR  } from '@nestjs/core'
 import { CacheConfigService } from './cache-config/cache-config.service'
 import { CacheConfigModule } from './cache-config/cache-config.module';
+import { TypeOrmConfigModule } from './type-orm-config/type-orm-config.module';
+import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
 
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true,}),
-    TypeOrmModule.forRootAsync({
-      imports : [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('mysql_host'),
-        port: configService.get('mysql_port'),
-        username: configService.get('mysql_username'),
-        password: configService.get('mysql_password'),
-        database: configService.get('mysql_dbname'),
-        entities: [],
-        synchronize: true,
-        autoLoadEntities: true,
-        keepConnectionAlive : false
-      }),
-      inject: [ConfigService],
-    }),
+    TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
     UserModule,
     CategoryModule,
     RatingModule,
@@ -44,7 +30,8 @@ import { CacheConfigModule } from './cache-config/cache-config.module';
     AuthModule,
     FrontendModule,
     CacheModule.registerAsync({useClass: CacheConfigService}),
-    CacheConfigModule
+    CacheConfigModule,
+    TypeOrmConfigModule
   ],
   controllers: [AppController],
   providers: [
