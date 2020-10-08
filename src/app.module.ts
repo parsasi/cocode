@@ -1,4 +1,4 @@
-import { Module , MiddlewareConsumer  } from '@nestjs/common';
+import { Module , MiddlewareConsumer , CacheModule , CacheInterceptor } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FrontendModule } from './frontend/frontend.module';
@@ -14,6 +14,9 @@ import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
 import { TutorService } from './user/tutor.service';
+import { APP_INTERCEPTOR  } from '@nestjs/core'
+import { CacheConfigService } from './cache-config/cache-config.service'
+import { CacheConfigModule } from './cache-config/cache-config.module';
 
 @Module({
   imports: [
@@ -40,9 +43,19 @@ import { TutorService } from './user/tutor.service';
     BcryptModule,
     AuthModule,
     FrontendModule,
+    CacheModule.registerAsync({useClass: CacheConfigService}),
+    CacheConfigModule
   ],
   controllers: [AppController],
-  providers: [AppService , FrontendService, TutorService],
+  providers: [
+    AppService,
+    FrontendService,
+    TutorService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInterceptor,
+    },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
