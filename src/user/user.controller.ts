@@ -9,13 +9,14 @@ import { TutorService } from './tutor.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { EditUserDto } from './dto/editUserDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
+import { VerifyFile , ModifyFile } from './helpers/ProfilePhotoFilter'
 
 @Controller('user')
 export class UserController {
     constructor(
         private userService : UserService,
         private tutorService : TutorService,
-        private awsS3Service : AwsS3Service 
+        private awsS3Service : AwsS3Service,
     ){}
 
     @Post('/create')
@@ -54,12 +55,31 @@ export class UserController {
     }
 
 
-    @Post('/photo')
-    @UseInterceptors(FileInterceptor('file'))
-    async updateProfilePhoto(@UploadedFile() file){
-        const bucketsList = await this.awsS3Service.getBucket('cocode-fileshare2')
-        console.log(bucketsList) 
-        console.log(file.originalname)
+    @Put('/photo')
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(FileInterceptor('file' , {limits : {fileSize : 2000000} , fileFilter : VerifyFile})) 
+    async updateProfilePhoto(@UploadedFile() file , @Res() res : Response ,  @Request() req){
+        
+        //If the file is not valid, it will be undefiend
+        if(!file){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
+        }
+
+        file = ModifyFile(file)
+
+        const bucket = await this.awsS3Service.getBucket('cocode-profile')
+        
+        const uploadParams = {
+            Bucket : bucket.Name,
+            Body : file.buffer,
+            Key : file.originalname, //Generated uuid inside ModifyFile
+        }
+
+        const uploadedFile = await this.awsS3Service.upload(uploadParams)
+
+        const userUpdate = await this.userService.updateUserPhoto(uploadedFile.Location , req.user.sub)
+        
+        return userUpdate ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+
     }
-    
 }

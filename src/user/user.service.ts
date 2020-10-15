@@ -1,8 +1,7 @@
 import { Injectable , HttpException , HttpStatus } from '@nestjs/common';
 import { InjectRepository  } from '@nestjs/typeorm'
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult  , InsertResult} from 'typeorm';
 import { User } from './user.entity'
-import { InsertResult } from 'typeorm' 
 import { BcryptService } from '../bcrypt/bcrypt.service'
 
 @Injectable()
@@ -41,6 +40,12 @@ export class UserService {
     async editUser(user , id : number) : Promise<User> {
         const userToUpdate  = await this.userRepository.findOne({id})
         user = {...userToUpdate , ...user}
+        return await this.userRepository.save(user)
+    }
+
+    async updateUserPhoto(url : string , id : number) : Promise<User> {
+        const userToUpdate : User = await this.userRepository.findOne({id})
+        const user = {...userToUpdate , profilePhoto : url}
         return await this.userRepository.save(user)
     }
 }

@@ -10,9 +10,13 @@ import { TutorService } from './tutor.service'
 import { AwsModule } from '../aws/aws.module'
 
 @Module({
-    imports : [TypeOrmModule.forFeature([User , Transaction , Tutor]) , BcryptModule , AwsModule],
+    imports : [
+        TypeOrmModule.forFeature([User , Transaction , Tutor]),
+        BcryptModule,
+        AwsModule
+    ],
     exports : [TypeOrmModule , UserService],
-    providers: [UserService , TutorService],
+    providers: [UserService , TutorService ],
     controllers: [UserController]
 })
 export class UserModule {}
