@@ -53,3 +53,6 @@ public/coverage
 
 #Jwt Token
 /src/auth/constant.ts
+
+#AWS Credintials
+aws.config.json

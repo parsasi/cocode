@@ -18,6 +18,8 @@ import { CacheConfigService } from './cache-config/cache-config.service'
 import { CacheConfigModule } from './cache-config/cache-config.module';
 import { TypeOrmConfigModule } from './type-orm-config/type-orm-config.module';
 import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
+import { AwsModule } from './aws/aws.module';
+import { AwsS3Module } from './aws-s3/aws-s3.module';
 
 @Module({
   imports: [
@@ -31,7 +33,9 @@ import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
     FrontendModule,
     CacheModule.registerAsync({useClass: CacheConfigService}),
     CacheConfigModule,
-    TypeOrmConfigModule
+    TypeOrmConfigModule,
+    AwsModule,
+    AwsS3Module
   ],
   controllers: [AppController],
   providers: [
