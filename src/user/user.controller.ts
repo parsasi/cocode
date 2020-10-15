@@ -57,7 +57,7 @@ export class UserController {
     @Post('/photo')
     @UseInterceptors(FileInterceptor('file'))
     async updateProfilePhoto(@UploadedFile() file){
-        const bucketsList = await this.awsS3Service.getBuckets()
+        const bucketsList = await this.awsS3Service.getBucket('cocode-fileshare2')
         console.log(bucketsList) 
         console.log(file.originalname)
     }
