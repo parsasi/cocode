@@ -43,9 +43,15 @@ export class UserService {
         return await this.userRepository.save(user)
     }
 
-    async updateUserPhoto(url : string , id : number) : Promise<User> {
+    async updateUserPhoto(key : string , id : number) : Promise<User> {
         const userToUpdate : User = await this.userRepository.findOne({id})
-        const user = {...userToUpdate , profilePhoto : url}
+        const user = {...userToUpdate , profilePhoto : key}
         return await this.userRepository.save(user)
+    }
+
+    async getUserPhoto(username : string) : Promise<string> {
+        const userToGetKeyFrom : User = await this.userRepository.findOne({username})
+        const userPhoto = await userToGetKeyFrom.profilePhoto
+        return await userPhoto
     }
 }

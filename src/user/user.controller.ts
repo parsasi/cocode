@@ -10,6 +10,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { EditUserDto } from './dto/editUserDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
 import { VerifyFile , ModifyFile } from './helpers/ProfilePhotoFilter'
+import { GetUserPhotoDto } from './dto/getUserPhotoDto'
 
 @Controller('user')
 export class UserController {
@@ -77,9 +78,26 @@ export class UserController {
 
         const uploadedFile = await this.awsS3Service.upload(uploadParams)
 
-        const userUpdate = await this.userService.updateUserPhoto(uploadedFile.Location , req.user.sub)
+        const userUpdate = await this.userService.updateUserPhoto(uploadedFile.Key , req.user.sub)
         
         return userUpdate ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
 
     }
+
+    @Get('/photo')
+    async getProfilePhoto(@Query() getUserPhotoDto : GetUserPhotoDto){
+        const userPhotoKey = await this.userService.getUserPhoto(getUserPhotoDto.username)
+        
+        const bucket = await this.awsS3Service.getBucket('cocode-profile')
+        
+        const donwloadParams = {
+            Bucket : bucket.Name,
+            Key : userPhotoKey,
+        }
+
+        const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
+
+        return {url : preSignedUrl}
+    }
+
 }

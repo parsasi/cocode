@@ -67,15 +67,7 @@ export class AwsS3Service {
         })
     }
 
-    async getObject(downloadParams) : Promise<any> {
-        return new Promise((resolve , reject) => {
-              this.AwsS3.listObjects(downloadParams, function(err, data) {
-                if (err) {
-                    reject(err)
-                  } if (data) {
-                    resolve(data)
-                  }
-              });
-        })
+    async getPresignedUrl(downloadParams) : Promise<any> {
+        return this.AwsS3.getSignedUrl('getObject' , downloadParams)
     }
 }
