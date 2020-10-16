@@ -11,6 +11,8 @@ import { EditUserDto } from './dto/editUserDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
 import { VerifyFile , ModifyFile } from './helpers/ProfilePhotoFilter'
 import { GetUserPhotoDto } from './dto/getUserPhotoDto'
+import { GetTutoUsernamerDto , GetTutorCategoryDto } from './dto/getTutorDto'
+import { Tutor } from './tutor.entity'
 
 @Controller('user')
 export class UserController {
@@ -98,6 +100,18 @@ export class UserController {
         const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
 
         return {url : preSignedUrl}
+    }
+
+    @Get('/tutor/search')
+    async getTutor(@Query() getTutorDto :  GetTutorCategoryDto | GetTutoUsernamerDto){
+        let tutors : Tutor[];
+        if('username' in getTutorDto){
+            const user = await this.userService.getUserByUsername(getTutorDto.username)
+            tutors = await this.tutorService.getTutors({user})
+        }else{
+            tutors = await this.tutorService.getTutors({categories : [getTutorDto.category]})
+        }
+        return tutors
     }
 
 }
