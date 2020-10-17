@@ -10,10 +10,9 @@ export class TutorSearchHelperService {
         ){}
     
         async searchTutorWithCategory(categories) : Promise<Tutor[]>{
-            console.log(this.tutorService)
             if(categories.length){
                 const tutorIds = categories.map(item => item.id)
-                const tutors = await this.tutorService.getTutors(tutorIds)
+                const tutors = await this.tutorService.getTutorCategorySearch(tutorIds)
                 return await tutors;
             }
             return Promise.resolve([])

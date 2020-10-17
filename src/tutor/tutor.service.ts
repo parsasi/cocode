@@ -21,13 +21,22 @@ export class TutorService {
         })
     }
 
-    async getTutors(categories : number[]) : Promise<Tutor[]>{
+    async getTutorCategorySearch(categories : number[]) : Promise<Tutor[]>{
         
         const tutors =  await (await this.tutorRepository
             .createQueryBuilder("tutor")
-            .leftJoinAndSelect("tutor.categories", "category" , "category.id in (:...categories)" , {categories})
+            .innerJoinAndSelect("tutor.categories", "category" , "category.id in (:...categories)" , {categories})
+            .leftJoinAndSelect("tutor.user", "user")
             .getMany())
-            console.log(tutors)
+        return tutors
+    }
+
+    async getTutorUsernameSearch(user : {username : string}) : Promise<Tutor[]> {
+        const tutors =  await (await this.tutorRepository
+            .createQueryBuilder("tutor")
+            .innerJoinAndSelect("tutor.user", "user" , "user.username like :username" , { username:`%${user.username}%` })
+            .leftJoinAndSelect("tutor.categories", "category")
+            .getMany())
 
         return tutors
     }
