@@ -1,7 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , ManyToMany , JoinTable , OneToOne } from 'typeorm';
-import { Category } from '../category/category.entity'
-import { Tutor } from './tutor.entity'
+import { Entity, Column, PrimaryGeneratedColumn , OneToOne } from 'typeorm';
+import { Tutor } from '../tutor/tutor.entity'
 
 @Entity()
 export class User {
@@ -37,10 +36,6 @@ export class User {
 
   @Column({default : 0})
   balance : number;
-
-  @ManyToMany(type => Category)
-  @JoinTable()
-  categories: Category[]
 
   @OneToOne(type => Tutor , tutor => tutor.user)
   tutor : Tutor;
