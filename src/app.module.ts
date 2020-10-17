@@ -12,7 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
-import { TutorService } from './user/tutor.service';
+import { TutorService } from './tutor/tutor.service';
 import { APP_INTERCEPTOR  } from '@nestjs/core'
 import { CacheConfigService } from './cache-config/cache-config.service'
 import { CacheConfigModule } from './cache-config/cache-config.module';

@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Tutor } from './tutor.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository , InsertResult  } from 'typeorm'
-import { User } from './user.entity'
+import { User } from '../user/user.entity'
+import { Category } from '../category/category.entity'
 
 @Injectable()
 export class TutorService {
@@ -20,19 +21,13 @@ export class TutorService {
         })
     }
 
-    async getTutors(tutor) : Promise<Tutor[] >{
-
+    async getTutors(categories : number[]) : Promise<Tutor[]>{
+        
         const tutors =  await (await this.tutorRepository
             .createQueryBuilder("tutor")
-            .where(tutor).leftJoinAndSelect("tutor.user", "user")
+            .leftJoinAndSelect("tutor.categories", "category" , "category.id in (:...categories)" , {categories})
             .getMany())
-            .map(item => {
-                // This needs to be done inside the query not manually and outside of it 
-                // TypeOrm docs do not mention any feature to define which columns to select from the joined table
-                delete item.user.hashedPassword
-                delete item.user.balance
-                return item
-            });
+            console.log(tutors)
 
         return tutors
     }

@@ -1,24 +1,20 @@
-import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res, Put , UploadedFile , UseInterceptors  } from '@nestjs/common';
+import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res, Put , UploadedFile , UseInterceptors , forwardRef, Inject  } from '@nestjs/common';
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/createUserDto'
 import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
 import { User } from './user.entity'
-import { TutorService } from './tutor.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { EditUserDto } from './dto/editUserDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
-import { VerifyFile , ModifyFile } from './helpers/ProfilePhotoFilter'
+import { VerifyFile , ModifyFile } from './helpers/profile-photo-filter.helper'
 import { GetUserPhotoDto } from './dto/getUserPhotoDto'
-import { GetTutoUsernamerDto , GetTutorCategoryDto } from './dto/getTutorDto'
-import { Tutor } from './tutor.entity'
 
 @Controller('user')
 export class UserController {
     constructor(
         private userService : UserService,
-        private tutorService : TutorService,
         private awsS3Service : AwsS3Service,
     ){}
 
@@ -36,17 +32,6 @@ export class UserController {
             user = await this.userService.getUserByEmail(userExistsDto.email)
         
         return user ? {exists : true} : {exists : false}
-    }
-    
-    @UseGuards(JwtAuthGuard)
-    @Post('/tutor/create')
-    async createTutor(@Request() req , @Res() res: Response){
-        //fetching the user associated with the tutor
-        const user : User | void = await this.userService.getUserByUsername(req.user.username)
-        if(user){
-            return await this.tutorService.createTutor(user)
-        }
-        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
     }
 
     @UseGuards(JwtAuthGuard)
@@ -100,18 +85,6 @@ export class UserController {
         const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
 
         return {url : preSignedUrl}
-    }
-
-    @Get('/tutor/search')
-    async getTutor(@Query() getTutorDto :  GetTutorCategoryDto | GetTutoUsernamerDto){
-        let tutors;
-        if('username' in getTutorDto){
-            // const user = await this.userService.getUserByUsername(getTutorDto.username)
-            tutors = await this.userService.getUserAndTutorByUsername({username : getTutorDto.username})
-        }else{
-            tutors = await this.tutorService.getTutors({categories : [getTutorDto.category]})
-        }   
-        return tutors
     }
 
 }

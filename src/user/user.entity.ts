@@ -1,6 +1,6 @@
 
 import { Entity, Column, PrimaryGeneratedColumn , OneToOne } from 'typeorm';
-import { Tutor } from './tutor.entity'
+import { Tutor } from '../tutor/tutor.entity'
 
 @Entity()
 export class User {
