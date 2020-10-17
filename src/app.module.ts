@@ -20,6 +20,7 @@ import { TypeOrmConfigModule } from './type-orm-config/type-orm-config.module';
 import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
 import { AwsModule } from './aws/aws.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
+import { TutorModule } from './tutor/tutor.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { AwsS3Module } from './aws-s3/aws-s3.module';
     CacheConfigModule,
     TypeOrmConfigModule,
     AwsModule,
-    AwsS3Module
+    AwsS3Module,
+    TutorModule
   ],
   controllers: [AppController],
   providers: [

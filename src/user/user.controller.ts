@@ -104,13 +104,13 @@ export class UserController {
 
     @Get('/tutor/search')
     async getTutor(@Query() getTutorDto :  GetTutorCategoryDto | GetTutoUsernamerDto){
-        let tutors : Tutor[];
+        let tutors;
         if('username' in getTutorDto){
-            const user = await this.userService.getUserByUsername(getTutorDto.username)
-            tutors = await this.tutorService.getTutors({user})
+            // const user = await this.userService.getUserByUsername(getTutorDto.username)
+            tutors = await this.userService.getUserAndTutorByUsername({username : getTutorDto.username})
         }else{
             tutors = await this.tutorService.getTutors({categories : [getTutorDto.category]})
-        }
+        }   
         return tutors
     }
 

@@ -54,4 +54,20 @@ export class UserService {
         const userPhoto = await userToGetKeyFrom.profilePhoto
         return await userPhoto
     }
+
+    async getUserAndTutorByUsername(user : {username : string}) : Promise<User[]>{
+        return await (await this.userRepository
+            .createQueryBuilder("user")
+            .where("user.username like :username", { username:`%${user.username}%` })
+            .leftJoinAndSelect("user.tutor", "tutor")
+            .getMany())
+            .map(item => {
+                // This needs to be done inside the query not manually and outside of it 
+                // TypeOrm docs do not mention any feature to define which columns to select from the joined table
+                delete item.hashedPassword
+                delete item.balance
+                return item
+            });
+
+    }
 }
