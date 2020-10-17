@@ -12,7 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { RatingModule } from './rating/rating.module';
 import { BcryptModule } from './bcrypt/bcrypt.module';
 import { AuthModule } from './auth/auth.module';
-import { TutorService } from './user/tutor.service';
+import { TutorService } from './tutor/tutor.service';
 import { APP_INTERCEPTOR  } from '@nestjs/core'
 import { CacheConfigService } from './cache-config/cache-config.service'
 import { CacheConfigModule } from './cache-config/cache-config.module';
@@ -20,6 +20,7 @@ import { TypeOrmConfigModule } from './type-orm-config/type-orm-config.module';
 import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
 import { AwsModule } from './aws/aws.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
+import { TutorModule } from './tutor/tutor.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { AwsS3Module } from './aws-s3/aws-s3.module';
     CacheConfigModule,
     TypeOrmConfigModule,
     AwsModule,
-    AwsS3Module
+    AwsS3Module,
+    TutorModule
   ],
   controllers: [AppController],
   providers: [

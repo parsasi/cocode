@@ -1,6 +1,6 @@
 import { Injectable , HttpException , HttpStatus } from '@nestjs/common';
 import { InjectRepository  } from '@nestjs/typeorm'
-import { Repository, UpdateResult  , InsertResult} from 'typeorm';
+import { Repository , InsertResult} from 'typeorm';
 import { User } from './user.entity'
 import { BcryptService } from '../bcrypt/bcrypt.service'
 
@@ -53,5 +53,21 @@ export class UserService {
         const userToGetKeyFrom : User = await this.userRepository.findOne({username})
         const userPhoto = await userToGetKeyFrom.profilePhoto
         return await userPhoto
+    }
+
+    async getUserAndTutorByUsername(user : {username : string}) : Promise<User[]>{
+        return await (await this.userRepository
+            .createQueryBuilder("user")
+            .where("user.username like :username", { username:`%${user.username}%` })
+            .leftJoinAndSelect("user.tutor", "tutor")
+            .getMany())
+            .map(item => {
+                // This needs to be done inside the query not manually and outside of it 
+                // TypeOrm docs do not mention any feature to define which columns to select from the joined table
+                delete item.hashedPassword
+                delete item.balance
+                return item
+            });
+
     }
 }
