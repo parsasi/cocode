@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn , OneToOne , JoinColumn  , Creat
 import { Attend } from '../attend/attend.entity'
 
 @Entity()
-export class Tutor {
+export class Purchase {
   @PrimaryGeneratedColumn()
   id: number;
 

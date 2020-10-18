@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , ManyToOne , JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity'
 import { Tutor } from '../tutor/tutor.entity'
 
@@ -7,12 +7,10 @@ export class Rating {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(type => User , user => user.id)
-  @JoinColumn()
+  @ManyToOne(() => User, user => user.ratings)
   user: User;
 
-  @OneToMany(type => Tutor , tutor => tutor.id)
-  @JoinColumn()
+  @ManyToOne(() => Tutor, tutor => tutor.ratings)
   tutor: Tutor;
 
   @Column({type:'tinyint'})

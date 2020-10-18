@@ -1,6 +1,10 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , OneToOne  , OneToMany} from 'typeorm';
 import { Tutor } from '../tutor/tutor.entity'
+import { Rating } from '../rating/rating.entity'
+import { Attend } from '../attend/attend.entity'
+import { Request } from '../request/request.entity'
+import { Transaction } from './transaction.entity'
 
 @Entity()
 export class User {
@@ -40,4 +44,15 @@ export class User {
   @OneToOne(type => Tutor , tutor => tutor.user)
   tutor : Tutor;
 
+  @OneToMany(() => Rating, rating => rating.user)
+  ratings : Rating[]
+
+  @OneToMany(() => Attend, attend => attend.user)
+  attends : Promise<Attend[]>
+
+  @OneToMany(() => Request, request => request.user)
+  requests : Promise<Request[]>
+
+  @OneToMany(() => Transaction , transaction => transaction.user)
+  transactions : Promise<Transaction[]>
 }

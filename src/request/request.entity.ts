@@ -1,5 +1,5 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn , JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn , JoinColumn  , ManyToOne} from 'typeorm';
 import { Tutor } from '../tutor/tutor.entity'
 import { User } from '../user/user.entity'
 import { Category } from '../category/category.entity'
@@ -16,24 +16,20 @@ export class Request {
   @Column({default : false})
   isClosed : boolean;
 
-  @OneToMany(type => Category , category => category.id)
-  @JoinColumn()
+  @ManyToOne(type => Category , category => category.requests)
   category : Category;
 
-  @OneToMany(type => Tutor , tutor => tutor.id)
-  @JoinColumn()
+  @ManyToOne(type => Tutor , tutor => tutor.requests)
   tutor : Tutor;
 
-  @OneToMany(type => User , user => user.id)
-  @JoinColumn()
+  @ManyToOne(type => User , user => user.requests)
   user : User;
 
   @Column()
   @CreateDateColumn()
   timeSent : Date;
 
-  @OneToMany(type => Session , session => session.id)
-  @JoinColumn()
+  @ManyToOne(type => Session , session => session.requests)
   session : Session;
 
 }

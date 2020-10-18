@@ -1,5 +1,5 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , UpdateDateColumn , JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , OneToMany , UpdateDateColumn , JoinColumn, ManyToOne, ManyToMany } from 'typeorm';
 import { User } from '../user/user.entity'
 import { Session } from '../session/session.entity'
 
@@ -8,12 +8,10 @@ export class Attend {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(type => Session , session => session.id)
-  @JoinColumn()
+  @ManyToOne(type => Session , session => session.attends)
   session : Session;
 
-  @OneToMany(type => User , user => user.id)
-  @JoinColumn()
+  @ManyToOne(type => User , user => user.attends)
   user : User;
 
   @Column()
