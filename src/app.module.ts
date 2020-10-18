@@ -21,6 +21,10 @@ import { TypeOrmConfigService } from './type-orm-config/type-orm-config.service'
 import { AwsModule } from './aws/aws.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { TutorModule } from './tutor/tutor.module';
+import { RequestModule } from './request/request.module';
+import { SessionModule } from './session/session.module';
+import { AttendModule } from './attend/attend.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @Module({
   imports: [
@@ -37,7 +41,11 @@ import { TutorModule } from './tutor/tutor.module';
     TypeOrmConfigModule,
     AwsModule,
     AwsS3Module,
-    TutorModule
+    TutorModule,
+    RequestModule,
+    SessionModule,
+    AttendModule,
+    PurchaseModule
   ],
   controllers: [AppController],
   providers: [
