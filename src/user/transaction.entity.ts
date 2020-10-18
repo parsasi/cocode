@@ -1,5 +1,5 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn, Double , JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , CreateDateColumn, Double , ManyToOne } from 'typeorm';
 import { User } from './user.entity'
 
 @Entity()
@@ -10,8 +10,7 @@ export class Transaction {
   @Column()
   token: string;
 
-  @OneToMany(type => User , user =>  user.id)
-  @JoinColumn()
+  @ManyToOne(type => User , user =>  user.transactions)
   user: User;
 
   @CreateDateColumn()

@@ -1,8 +1,9 @@
 
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn , JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn , JoinColumn, ManyToOne } from 'typeorm';
 import { Tutor } from '../tutor/tutor.entity'
-import { User } from '../user/user.entity'
 import { Category } from '../category/category.entity'
+import { Attend } from '../attend/attend.entity'
+import { Request } from '../request/request.entity'
 
 @Entity()
 export class Session {
@@ -15,12 +16,10 @@ export class Session {
   @Column({type : 'datetime'})
   startTime : Date;
 
-  @OneToMany(type => Category , category => category.id)
-  @JoinColumn()
+  @ManyToOne(type => Category , category => category.sessions)
   category : Category;
 
-  @OneToMany(type => Tutor , tutor => tutor.id)
-  @JoinColumn()
+  @ManyToOne(type => Tutor , tutor => tutor.sessions)
   tutor : Tutor;
 
   @Column()
@@ -41,5 +40,11 @@ export class Session {
 
   @Column()
   codejarPublicUrl : string;
+
+  @OneToMany(() => Attend, attend => attend.session)
+  attends : Attend[];
+
+  @OneToMany(() => Request, request => request.session)
+  requests : Request[]
 
 }
