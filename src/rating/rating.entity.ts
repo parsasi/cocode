@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn , OneToMany , JoinColumn } from 'typeorm';
 import { User } from '../user/user.entity'
+import { Tutor } from '../tutor/tutor.entity'
 
 @Entity()
 export class Rating {
@@ -8,14 +9,14 @@ export class Rating {
 
   @OneToMany(type => User , user => user.id)
   @JoinColumn()
-  ratorUser: User;
+  user: User;
 
-  @OneToMany(type => User , user => user.id)
+  @OneToMany(type => Tutor , tutor => tutor.id)
   @JoinColumn()
-  ratedUser: User;
+  tutor: Tutor;
 
   @Column({type:'tinyint'})
-  rate: number;
+  score: number;
 
   @Column()
   text: string;
