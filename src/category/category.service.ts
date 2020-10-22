@@ -25,4 +25,10 @@ export class CategoryService {
         .where("category.text like :text", { text:`%${searchTerm}%` })
         .getMany()
     }
+
+    async getCategoryWithText(searchCategory : {text : string}) : Promise<Category>{
+        return await this
+        .categoryRepository
+        .findOne(searchCategory)
+    }
 }
