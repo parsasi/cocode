@@ -35,7 +35,7 @@ export class TutorController {
     async getTutor(@Query() getTutorDto :  GetTutorCategoryDto | GetTutoUsernamerDto) : Promise<Tutor[] | User[]>{
         if('username' in getTutorDto){
 
-            return await this.tutorService.getTutorUsernameSearch({username : getTutorDto.username})
+            return await this.tutorService.getTutorsUsernameSearch({username : getTutorDto.username})
         }else{
             const categories = await this.categoryService.getCategoryForSearch(getTutorDto.category)
             return await this.tutorSearchHelperService.searchTutorWithCategory(categories)
