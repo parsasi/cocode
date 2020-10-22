@@ -3,7 +3,6 @@ import { Tutor } from './tutor.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository , InsertResult  } from 'typeorm'
 import { User } from '../user/user.entity'
-import { Category } from '../category/category.entity'
 
 @Injectable()
 export class TutorService {
@@ -21,7 +20,7 @@ export class TutorService {
         })
     }
 
-    async getTutorCategorySearch(categories : number[]) : Promise<Tutor[]>{
+    async getTutorsCategorySearch(categories : number[]) : Promise<Tutor[]>{
         
         const tutors =  await (await this.tutorRepository
             .createQueryBuilder("tutor")
@@ -31,7 +30,9 @@ export class TutorService {
         return tutors
     }
 
-    async getTutorUsernameSearch(user : {username : string}) : Promise<Tutor[]> {
+
+    //returns an array of tutors with usernames close to given username
+    async getTutorsUsernameSearch(user : {username : string}) : Promise<Tutor[]> {
         const tutors =  await (await this.tutorRepository
             .createQueryBuilder("tutor")
             .innerJoinAndSelect("tutor.user", "user" , "user.username like :username" , { username:`%${user.username}%` })
@@ -39,6 +40,16 @@ export class TutorService {
             .getMany())
 
         return tutors
+    }
+
+
+    //returns a single tutor with the given username
+    async getTutorUsernameSearch(user : {username : string}) : Promise<Tutor> {
+        return await this.tutorRepository
+            .createQueryBuilder("tutor")
+            .innerJoinAndSelect("tutor.user", "user" , "user.username = :username" , { username: user.username })
+            .leftJoinAndSelect("tutor.categories", "category")
+            .getOne()
     }
 
     async createTutor(user : User) : Promise<InsertResult>{

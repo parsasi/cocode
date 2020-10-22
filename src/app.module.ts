@@ -1,4 +1,4 @@
-import { Module , MiddlewareConsumer , CacheModule , CacheInterceptor } from '@nestjs/common';
+import { Module , MiddlewareConsumer , CacheModule , CacheInterceptor , Inject , CACHE_MANAGER } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FrontendModule } from './frontend/frontend.module';
@@ -59,6 +59,15 @@ import { PurchaseModule } from './purchase/purchase.module';
   ],
 })
 export class AppModule {
+  constructor(@Inject(CACHE_MANAGER) cacheManager) {
+    const client = cacheManager.store.getClient();
+
+    //Handles Redis connectino errors so that the app wouldn't crash if the connection fails
+    client.on('error', (error) => {
+        console.error(error);
+    });
+}
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(FrontendMiddleware)
