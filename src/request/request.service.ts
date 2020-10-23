@@ -13,11 +13,9 @@ export class RequestService {
         private requestRepository : Repository<Request>,
     ){}
 
-    async createRequest(request : {tutor : Tutor , category : Category , user : User}) : Promise<InsertResult> {
+    async createRequest(request : {tutor : Tutor , category : Category , user : User , startTime : Date , duration : number}) : Promise<InsertResult> {
         return await this.requestRepository.insert(request)
     }
-
-    
 
 
 }

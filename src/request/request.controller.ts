@@ -19,7 +19,9 @@ export class RequestController {
         .sendRequest(
             createRequestDto.username,
             createRequestDto.category,
-            req.user.username
+            createRequestDto.startTime,
+            createRequestDto.duration,
+            req.user.username,
         )
     }
 

@@ -1,5 +1,7 @@
 
-import {IsNotEmpty } from 'class-validator';
+import {IsNotEmpty , IsDateString , IsNumber  , Max} from 'class-validator';
+
+const NUMBER_OF_SECONDS_IN_A_DAY = 60 * 60 * 24;
 
 export class CreateRequestDto {
     //Username of the intended tutor
@@ -11,5 +13,14 @@ export class CreateRequestDto {
     //Category text of the tutoring session
     @IsNotEmpty()
     category: string;
+
+    @IsNotEmpty()
+    @IsDateString()
+    startTime: Date;
+
+    @IsNotEmpty()
+    @IsNumber()
+    @Max(NUMBER_OF_SECONDS_IN_A_DAY)
+    duration: number;
     
 }

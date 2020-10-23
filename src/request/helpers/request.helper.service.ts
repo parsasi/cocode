@@ -17,16 +17,18 @@ export class RequestHelperService {
         private userService : UserService
     ){}
     
-    async sendRequest(tutorUsername : string , categoryText : string , userUsername : stringType){
-        const tutor : Tutor = await this.tutorService.getTutorUsernameSearch({username : tutorUsername});
+    async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , userUsername : stringType){
+        const tutor : Tutor = await this.tutorService.getTutorUsernameSearch({username : username});
 
         const category : Category = await this.categoryService.getCategoryWithText({text : categoryText})
 
         const user : User | void = await this.userService.getUserByUsername(userUsername)
 
+        startTime = new Date(new Date(startTime).toUTCString())
+        
 
         if(tutor && category && user){
-            return await this.requestService.createRequest({tutor , category , user})
+            return await this.requestService.createRequest({tutor , category , user , startTime , duration})
         }else{
             throw new HttpException("Invalid Input", HttpStatus.INTERNAL_SERVER_ERROR);
         }
