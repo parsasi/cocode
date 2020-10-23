@@ -16,6 +16,9 @@ export class Session {
   @Column({type : 'datetime'})
   startTime : Date;
 
+  @Column({type : 'bigint'})
+  duration : number;
+
   @ManyToOne(type => Category , category => category.sessions)
   category : Category;
 
