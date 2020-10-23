@@ -21,8 +21,26 @@ export class RequestService {
         return await this.requestRepository.findOne(condition)
     }
 
-    async editRequest(request) : Promise<Request> {
-        const 
+    async respondRequest(condition : {tutor : Tutor , id : number} , isAccepted : boolean) : Promise<Request> {
+        
+        //Looking for a request with the given ID and with the tutor who is logged in
+        //This is to make sure that tutors can only respond to their own requests        
+        let request = await this.requestRepository.findOne(condition);
+        
+        if(!request){
+            throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+        if(request.isClosed){
+            throw new HttpException("Request already closed", HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
+        request = {...request , isAccepted , isClosed : true}
+
+        return await this.requestRepository.save(request);
+
+
+
+
     }
     // const userToUpdate  = await this.userRepository.findOne({id})
     //     user = {...userToUpdate , ...user}

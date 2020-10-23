@@ -31,14 +31,7 @@ import { PurchaseModule } from './purchase/purchase.module';
     ConfigModule.forRoot({isGlobal: true,}),
     TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
     UserModule,
-    CategoryModule,nstructor(@Inject(CACHE_MANAGER) cacheManager) {
-      const client = cacheManager.store.getClient();
-  
-      //Handles Redis connectino errors so that the app wouldn't crash if the connection fails
-      client.on('error', (error) => {
-          console.error(error);
-      });
-  }
+    CategoryModule,
     RatingModule,
     BcryptModule,
     AuthModule,

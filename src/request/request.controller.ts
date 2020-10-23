@@ -27,9 +27,9 @@ export class RequestController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Put('/respons')
-    async responseRequest(@Body() responseRequestDto : ResponseRequestDto, @Request() req){
-
+    @Put('/respond')
+    async respondRequest(@Body() responseRequestDto : ResponseRequestDto, @Request() req){
+        return await this.requestHelperService.respondRequest(responseRequestDto.isAccepted , responseRequestDto.id , req.user.username)
     }
 
 }

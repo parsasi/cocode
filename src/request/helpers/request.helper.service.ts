@@ -39,28 +39,17 @@ export class RequestHelperService {
     }
 
 
-    aysnc responseRequest(isAccepted : boolean , id : number , userUsername : string){
+    async respondRequest(isAccepted : boolean , id : number , userUsername : string){
         // Finding the tutor associated with the logged-in user
         const tutor : Tutor = await this.tutorService.getTutorUsernameSearch({username : userUsername})
         
         if(tutor){
-            //Looking for a request with the given ID and with the tutor who is logged in
-            //This is to make sure that tutors can only respond to their own requests
-            const request = await this.requestService.getRequest({id  , tutor})
-
-            if(request){
-                request.isAccepted = isAccepted
-                request.isClosed = true
-
-                //If it's not accepted, the request gets save
-                if(!isAccepted){
-                    
-                }else{
-
-                }
-
+            //changes isAccepted in the targeted request
+            const requestRespondResults = await this.requestService.respondRequest({tutor , id} , isAccepted)
+            if(!isAccepted){
+                return await requestRespondResults
             }else{
-                throw new HttpException("Unauthorized Tutor", HttpStatus.UNAUTHORIZED);
+                return await requestRespondResults   
             }
         }else{
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
