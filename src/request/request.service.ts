@@ -17,5 +17,15 @@ export class RequestService {
         return await this.requestRepository.insert(request)
     }
 
+    async getRequest(condition) : Promise<Request> {
+        return await this.requestRepository.findOne(condition)
+    }
+
+    async editRequest(request) : Promise<Request> {
+        const 
+    }
+    // const userToUpdate  = await this.userRepository.findOne({id})
+    //     user = {...userToUpdate , ...user}
+    //     return await this.userRepository.save(user)
 
 }

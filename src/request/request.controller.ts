@@ -1,8 +1,9 @@
-import { Controller, Post, UseGuards, HttpStatus , Body , Request } from '@nestjs/common';
+import { Controller, Post, UseGuards, HttpStatus , Body , Request , Put } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { CreateRequestDto } from './dto/createRequestDto'
 import { RequestHelperService } from './helpers/request.helper.service'
 import { RequestService } from './request.service'
+import { ResponseRequestDto } from './dto/responseRequestDto'
 
 @Controller('request')
 export class RequestController {
@@ -23,6 +24,12 @@ export class RequestController {
             createRequestDto.duration,
             req.user.username,
         )
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Put('/respons')
+    async responseRequest(@Body() responseRequestDto : ResponseRequestDto, @Request() req){
+
     }
 
 }

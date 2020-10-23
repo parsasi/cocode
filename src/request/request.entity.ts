@@ -16,11 +16,11 @@ export class Request {
   @Column({default : false})
   isClosed : boolean;
 
-    @Column({type : 'datetime'})
-    startTime : Date;
+  @Column({type : 'datetime'})
+  startTime : Date;
 
-    @Column({type : 'bigint'})
-    duration : number;
+  @Column({type : 'bigint'})
+  duration : number;
 
   @ManyToOne(type => Category , category => category.requests)
   category : Category;
