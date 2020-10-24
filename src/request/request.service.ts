@@ -6,6 +6,19 @@ import { User } from '../user/user.entity'
 import { Tutor } from '../tutor/tutor.entity'
 import { Category } from '../category/category.entity'
 
+interface respondRequestServiceDto{
+    tutor : Tutor
+    id : number
+}
+
+interface createRequestServiceDto{
+    tutor : Tutor,
+    category : Category,
+    user : User,
+    startTime : Date,
+    duration : number
+}
+
 @Injectable()
 export class RequestService {
     constructor(
@@ -13,15 +26,23 @@ export class RequestService {
         private requestRepository : Repository<Request>,
     ){}
 
-    async createRequest(request : {tutor : Tutor , category : Category , user : User , startTime : Date , duration : number}) : Promise<InsertResult> {
+    async createRequest(request : createRequestServiceDto) : Promise<InsertResult> {
         return await this.requestRepository.insert(request)
     }
 
     async getRequest(condition) : Promise<Request> {
-        return await this.requestRepository.findOne(condition)
+        // return await this.requestRepository.findOne(condition)
+
+        return await this.requestRepository
+        .createQueryBuilder("request")
+        .leftJoinAndSelect("request.tutor", "tutor")
+        .leftJoinAndSelect("request.user", "user")
+        .leftJoinAndSelect("request.category", "category")
+        .getOne()
     }
 
-    async respondRequest(condition : {tutor : Tutor , id : number} , isAccepted : boolean) : Promise<Request> {
+
+    async respondRequest(condition : respondRequestServiceDto , isAccepted : boolean) : Promise<Request> {
         
         //Looking for a request with the given ID and with the tutor who is logged in
         //This is to make sure that tutors can only respond to their own requests        
@@ -30,7 +51,7 @@ export class RequestService {
         if(!request){
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        if(request.isClosed){
+        else if(request.isClosed){
             throw new HttpException("Request already closed", HttpStatus.METHOD_NOT_ALLOWED);
         }
 
@@ -38,12 +59,5 @@ export class RequestService {
 
         return await this.requestRepository.save(request);
 
-
-
-
     }
-    // const userToUpdate  = await this.userRepository.findOne({id})
-    //     user = {...userToUpdate , ...user}
-    //     return await this.userRepository.save(user)
-
 }
