@@ -11,7 +11,7 @@ export class CategoryController {
     
     @Post('/create')
     async createCategory(@Body() createCategoryDto : CreateCategoryDto){
-        this.categoryService.createCategory(createCategoryDto)
+        return await this.categoryService.createCategory(createCategoryDto)
     }
 
     @Get('/')

@@ -8,7 +8,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({unique: true , nullable : false})
   text: string;
 
   @Column()
