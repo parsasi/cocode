@@ -7,6 +7,8 @@ import { Tutor } from '../../tutor/tutor.entity'
 import { Category } from '../../category/category.entity'
 import { stringType } from 'aws-sdk/clients/iam'
 import { User } from '../../user/user.entity'
+import { SessionService } from '../../session/session.service'
+import { Session } from '../../session/session.entity'
 
 @Injectable()
 export class RequestHelperService {
@@ -14,7 +16,8 @@ export class RequestHelperService {
         private requestService : RequestService,
         private categoryService : CategoryService,
         private tutorService : TutorService,
-        private userService : UserService
+        private userService : UserService,
+        private sessionService : SessionService
     ){}
     
     async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , userUsername : stringType){
@@ -45,15 +48,40 @@ export class RequestHelperService {
         
         if(tutor){
             //changes isAccepted in the targeted request
-            const requestRespondResults = await this.requestService.respondRequest({tutor , id} , isAccepted)
+            const requestRespondResults = await this.requestService.respondRequest({tutor, id} , isAccepted)
             if(!isAccepted){
+                //if the request is declined, only the request gets changed
                 return await requestRespondResults
             }else{
-                return await requestRespondResults   
+
+                //If the request is accepted, a new session gets created with some of the info from the request
+                const createSession = await this.createSession({id})
+                return (await createSession) && await requestRespondResults   
             }
         }else{
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    async createSession(condition : {id : number}) {
+
+        //Gets the associated request with all of its relations
+        const request = await this.requestService.getRequest(condition)
+
+        //This probably needs to be calculated in a helper inside the Session Module
+        const rate = (request.duration / 3600 ) * await request.tutor.hourlyRate;
+        
+
+        const newSession = {
+            startTime : request.startTime,
+            duration : request.duration,
+            category : request.category,
+            tutor : request.tutor,
+            rate :  rate
+        }
+
+        //Creates a session from the accepted request
+        return (await request) && this.sessionService.createSession(newSession)
     }
 
        

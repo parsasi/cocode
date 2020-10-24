@@ -31,8 +31,16 @@ export class RequestService {
     }
 
     async getRequest(condition) : Promise<Request> {
-        return await this.requestRepository.findOne(condition)
+        // return await this.requestRepository.findOne(condition)
+
+        return await this.requestRepository
+        .createQueryBuilder("request")
+        .leftJoinAndSelect("request.tutor", "tutor")
+        .leftJoinAndSelect("request.user", "user")
+        .leftJoinAndSelect("request.category", "category")
+        .getOne()
     }
+
 
     async respondRequest(condition : respondRequestServiceDto , isAccepted : boolean) : Promise<Request> {
         

@@ -31,19 +31,13 @@ export class RequestController {
     @UseGuards(JwtAuthGuard)
     @Put('/respond')
     async respondRequest(@Body() responseRequestDto : ResponseRequestDto, @Request() req , @Response() res){
+        
+        //Changes the respond record in the database
+        //If the request is accepted, a new session gets created as well
         const requestRespondResult =  await this.requestHelperService.respondRequest(responseRequestDto.isAccepted , responseRequestDto.id , req.user.username)
-        if(responseRequestDto.isAccepted){
-            const request = await requestRespondResult && await this.requestService.getRequest({id : responseRequestDto.id})
-            const session = {
-                startTime : request.startTime,
-                duration : request.duration,
-                
-            }
-            // this.sessionService.createSession()
 
-        }else{
-            return await requestRespondResult && res.send(HttpStatus.OK)
-        }
+        return await requestRespondResult && res.status(HttpStatus.OK).send()
+
     }
 
 }
