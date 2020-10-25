@@ -52,6 +52,7 @@ export class RequestHelperService {
         if(tutor){
             //changes isAccepted in the targeted request
             const requestRespondResults = await this.requestService.respondRequest({tutor, id} , isAccepted)
+            
             if(!isAccepted){
                 //if the request is declined, only the request gets changed
                 return await requestRespondResults
@@ -63,12 +64,13 @@ export class RequestHelperService {
                 const createSession = await this.createSession({id : requestId})
                 // const createAttend  = await this.createAttend({})
 
+                //Gets the newly created session's id to use in attend 
                 const sessionId = await createSession.identifiers[0].id
 
+                //Creates an attend for the user that sent the request
                 const createAttend = await this.createAttend({session : sessionId , request : requestId}) 
 
-                console.log(createAttend)
-
+                //Resolves when createSession and createAttend are done
                 return await Promise.all([createSession , createAttend]) && await requestRespondResults   
             }
         }else{
@@ -115,27 +117,3 @@ export class RequestHelperService {
 
        
 }
-
-//Session Insert Result example
-// InsertResult {
-//     identifiers: [ { id: 2 } ],
-//     generatedMaps: [
-//       {
-//         id: 2,
-//         timeSent: 2020-10-25T16:31:54.419Z,
-//         isStarted: false,
-//         isEnded: false
-//       }
-//     ],
-//     raw: OkPacket {
-//       fieldCount: 0,
-//       affectedRows: 1,
-//       insertId: 2,
-//       serverStatus: 2,
-//       warningCount: 2,
-//       message: '',
-//       protocol41: true,
-//       changedRows: 0
-//     }
-//   }
-  
