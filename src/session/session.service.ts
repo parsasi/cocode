@@ -28,4 +28,9 @@ export class SessionService {
         }
         return await this.sessionRepository.insert(newSession)
     }
+
+
+    async getSession(condition) : Promise<Session> {
+        return await this.sessionRepository.findOne(condition)
+    }
 }

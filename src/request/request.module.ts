@@ -1,4 +1,4 @@
-import { Module, Session } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { RequestService } from './request.service';
 import { RequestController } from './request.controller';
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -8,6 +8,7 @@ import { TutorModule } from '../tutor/tutor.module'
 import { CategoryModule } from '../category/category.module'
 import { RequestHelperService } from './helpers/request.helper.service'
 import { SessionModule } from '../session/session.module'
+import { AttendModule } from '../attend/attend.module'
 
 @Module({
   providers: [
@@ -21,7 +22,8 @@ import { SessionModule } from '../session/session.module'
     CategoryModule,
     UserModule,
     TutorModule,
-    SessionModule
+    SessionModule,
+    AttendModule
   ],
 
 })

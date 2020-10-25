@@ -8,7 +8,9 @@ import { Category } from '../../category/category.entity'
 import { stringType } from 'aws-sdk/clients/iam'
 import { User } from '../../user/user.entity'
 import { SessionService } from '../../session/session.service'
+import { AttendService } from '../../attend/attend.service'
 import { Session } from '../../session/session.entity'
+import { create } from 'domain';
 
 @Injectable()
 export class RequestHelperService {
@@ -17,7 +19,8 @@ export class RequestHelperService {
         private categoryService : CategoryService,
         private tutorService : TutorService,
         private userService : UserService,
-        private sessionService : SessionService
+        private sessionService : SessionService,
+        private attendService : AttendService
     ){}
     
     async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , userUsername : stringType){
@@ -49,14 +52,26 @@ export class RequestHelperService {
         if(tutor){
             //changes isAccepted in the targeted request
             const requestRespondResults = await this.requestService.respondRequest({tutor, id} , isAccepted)
+            
             if(!isAccepted){
                 //if the request is declined, only the request gets changed
                 return await requestRespondResults
             }else{
 
+                const requestId = id
+
                 //If the request is accepted, a new session gets created with some of the info from the request
-                const createSession = await this.createSession({id})
-                return (await createSession) && await requestRespondResults   
+                const createSession = await this.createSession({id : requestId})
+                // const createAttend  = await this.createAttend({})
+
+                //Gets the newly created session's id to use in attend 
+                const sessionId = await createSession.identifiers[0].id
+
+                //Creates an attend for the user that sent the request
+                const createAttend = await this.createAttend({session : sessionId , request : requestId}) 
+
+                //Resolves when createSession and createAttend are done
+                return await Promise.all([createSession , createAttend]) && await requestRespondResults   
             }
         }else{
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
@@ -81,7 +96,23 @@ export class RequestHelperService {
         }
 
         //Creates a session from the accepted request
-        return (await request) && this.sessionService.createSession(newSession)
+        return (await request) && await this.sessionService.createSession(newSession)
+    }
+
+
+    async createAttend(condition : {session : number , request : number}){
+
+        const request = await this.requestService.getRequest({id : condition.request})
+
+        const user = await request.user
+
+        const session : Session | void = await this.sessionService.getSession({id : condition.session})
+
+        if(user && session)
+            return this.attendService.createAttend({session : await session  , user})
+        else
+            throw new HttpException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
        

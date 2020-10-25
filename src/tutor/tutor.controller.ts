@@ -36,10 +36,8 @@ export class TutorController {
     async getTutor(@Query() getTutorDto :  GetTutorCategoryDto | GetTutoUsernamerDto) : Promise<Tutor[] | User[]>{
         console.log("REQUEST RECIEVED:" , getTutorDto)
         if('username' in getTutorDto){
-            console.log("REQUEST IS A USERNAME ONE");
             return await this.tutorService.getTutorsUsernameSearch({username : getTutorDto.username})
         }else{
-            console.log("REQUEST IS A CATEGORY ONE");
             const categories = await this.categoryService.getCategoryForSearch(getTutorDto.category)
             return await this.tutorSearchHelperService.searchTutorWithCategory(categories)
         }   
