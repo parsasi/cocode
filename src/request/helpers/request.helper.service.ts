@@ -8,7 +8,9 @@ import { Category } from '../../category/category.entity'
 import { stringType } from 'aws-sdk/clients/iam'
 import { User } from '../../user/user.entity'
 import { SessionService } from '../../session/session.service'
+import { AttendService } from '../../attend/attend.service'
 import { Session } from '../../session/session.entity'
+import { create } from 'domain';
 
 @Injectable()
 export class RequestHelperService {
@@ -17,7 +19,8 @@ export class RequestHelperService {
         private categoryService : CategoryService,
         private tutorService : TutorService,
         private userService : UserService,
-        private sessionService : SessionService
+        private sessionService : SessionService,
+        private attendService : AttendService
     ){}
     
     async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , userUsername : stringType){
@@ -54,9 +57,19 @@ export class RequestHelperService {
                 return await requestRespondResults
             }else{
 
+                const requestId = id
+
                 //If the request is accepted, a new session gets created with some of the info from the request
-                const createSession = await this.createSession({id})
-                return (await createSession) && await requestRespondResults   
+                const createSession = await this.createSession({id : requestId})
+                // const createAttend  = await this.createAttend({})
+
+                const sessionId = await createSession.identifiers[0].id
+
+                const createAttend = await this.createAttend({session : sessionId , request : requestId}) 
+
+                console.log(createAttend)
+
+                return await Promise.all([createSession , createAttend]) && await requestRespondResults   
             }
         }else{
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
@@ -81,8 +94,48 @@ export class RequestHelperService {
         }
 
         //Creates a session from the accepted request
-        return (await request) && this.sessionService.createSession(newSession)
+        return (await request) && await this.sessionService.createSession(newSession)
+    }
+
+
+    async createAttend(condition : {session : number , request : number}){
+
+        const request = await this.requestService.getRequest({id : condition.request})
+
+        const user = await request.user
+
+        const session : Session | void = await this.sessionService.getSession({id : condition.session})
+
+        if(user && session)
+            return this.attendService.createAttend({session : await session  , user})
+        else
+            throw new HttpException("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
        
 }
+
+//Session Insert Result example
+// InsertResult {
+//     identifiers: [ { id: 2 } ],
+//     generatedMaps: [
+//       {
+//         id: 2,
+//         timeSent: 2020-10-25T16:31:54.419Z,
+//         isStarted: false,
+//         isEnded: false
+//       }
+//     ],
+//     raw: OkPacket {
+//       fieldCount: 0,
+//       affectedRows: 1,
+//       insertId: 2,
+//       serverStatus: 2,
+//       warningCount: 2,
+//       message: '',
+//       protocol41: true,
+//       changedRows: 0
+//     }
+//   }
+  

@@ -8,5 +8,6 @@ import { Attend } from './attend.entity'
   providers: [AttendService],
   controllers: [AttendController],
   imports : [TypeOrmModule.forFeature([Attend])],
+  exports : [AttendService]
 })
 export class AttendModule {}
