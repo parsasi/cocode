@@ -37,6 +37,7 @@ export class RequestHelperService {
         startTime = new Date(new Date(startTime).toUTCString())
         
 
+        //If everything exist and is selected creates the request
         if(tutor && category && user){
             return await this.requestService.createRequest({tutor , category , user , startTime , duration})
         }else{
@@ -102,12 +103,16 @@ export class RequestHelperService {
 
     async createAttend(condition : {session : number , request : number}){
 
+        //Gets the associated request, to extract the user from it
         const request = await this.requestService.getRequest({id : condition.request})
 
+        //Extracts the user from the request
         const user = await request.user
 
+        //Select the associated session
         const session : Session | void = await this.sessionService.getSession({id : condition.session})
 
+        //If the entities exist, creates an attend
         if(user && session)
             return this.attendService.createAttend({session : await session  , user})
         else
