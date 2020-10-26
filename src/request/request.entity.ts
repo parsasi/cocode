@@ -22,6 +22,9 @@ export class Request {
   @Column({type : 'bigint'})
   duration : number;
 
+  @Column()
+  description : string;
+
   @ManyToOne(type => Category , category => category.requests)
   category : Category;
 

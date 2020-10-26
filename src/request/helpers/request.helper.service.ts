@@ -22,7 +22,7 @@ export class RequestHelperService {
         private attendService : AttendService
     ){}
     
-    async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , userUsername : stringType){
+    async sendRequest(username : string , categoryText : string , startTime : string | Date , duration : number , description : string ,userUsername : stringType ){
         
         //Getting tutor for the given username
         const tutor : Tutor = await this.tutorService.getTutorUsernameSearch({username : username});
@@ -38,7 +38,7 @@ export class RequestHelperService {
 
         //If everything exist and is selected creates the request
         if(tutor && category && user){
-            return await this.requestService.createRequest({tutor , category , user , startTime , duration})
+            return await this.requestService.createRequest({tutor , category , user , startTime , duration , description})
         }else{
             throw new HttpException("Invalid Input", HttpStatus.INTERNAL_SERVER_ERROR);
         }

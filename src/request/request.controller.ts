@@ -24,6 +24,7 @@ export class RequestController {
             createRequestDto.category,
             createRequestDto.startTime,
             createRequestDto.duration,
+            createRequestDto.description,
             req.user.username,
         )
     }
