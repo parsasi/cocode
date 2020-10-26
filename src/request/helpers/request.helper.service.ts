@@ -10,7 +10,6 @@ import { User } from '../../user/user.entity'
 import { SessionService } from '../../session/session.service'
 import { AttendService } from '../../attend/attend.service'
 import { Session } from '../../session/session.entity'
-import { create } from 'domain';
 
 @Injectable()
 export class RequestHelperService {
@@ -37,6 +36,7 @@ export class RequestHelperService {
         startTime = new Date(new Date(startTime).toUTCString())
         
 
+        //If everything exist and is selected creates the request
         if(tutor && category && user){
             return await this.requestService.createRequest({tutor , category , user , startTime , duration})
         }else{
@@ -62,16 +62,18 @@ export class RequestHelperService {
 
                 //If the request is accepted, a new session gets created with some of the info from the request
                 const createSession = await this.createSession({id : requestId})
-                // const createAttend  = await this.createAttend({})
 
                 //Gets the newly created session's id to use in attend 
                 const sessionId = await createSession.identifiers[0].id
+
+                //Adds the newly created session to the request
+                const updateRequest = await this.requestService.addSession({id : requestId} , sessionId)
 
                 //Creates an attend for the user that sent the request
                 const createAttend = await this.createAttend({session : sessionId , request : requestId}) 
 
                 //Resolves when createSession and createAttend are done
-                return await Promise.all([createSession , createAttend]) && await requestRespondResults   
+                return await Promise.all([createSession , createAttend , updateRequest]) && await requestRespondResults   
             }
         }else{
             throw new HttpException("Unauthorized", HttpStatus.UNAUTHORIZED);
@@ -84,7 +86,7 @@ export class RequestHelperService {
         const request = await this.requestService.getRequest(condition)
 
         //This probably needs to be calculated in a helper inside the Session Module
-        const rate = (request.duration / 3600 ) * await request.tutor.hourlyRate;
+        const rate = (request.duration / 3600 ) * request.tutor.hourlyRate;
         
 
         const newSession = {
@@ -102,12 +104,16 @@ export class RequestHelperService {
 
     async createAttend(condition : {session : number , request : number}){
 
+        //Gets the associated request, to extract the user from it
         const request = await this.requestService.getRequest({id : condition.request})
 
+        //Extracts the user from the request
         const user = await request.user
 
+        //Select the associated session
         const session : Session | void = await this.sessionService.getSession({id : condition.session})
 
+        //If the entities exist, creates an attend
         if(user && session)
             return this.attendService.createAttend({session : await session  , user})
         else
