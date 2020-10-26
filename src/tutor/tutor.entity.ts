@@ -5,6 +5,7 @@ import { Category } from '../category/category.entity'
 import { Rating } from '../rating/rating.entity'
 import { Session } from '../session/session.entity'
 import { Request } from '../request/request.entity'
+import { Resume } from '../resume/resume.entity'
 
 @Entity()
 export class Tutor {
@@ -42,4 +43,7 @@ export class Tutor {
 
   @OneToMany(() => Request, request => request.tutor)
   requests : Promise<Request[]>
+
+  @OneToMany(() => Resume, resume => resume.tutor)
+  resumes : Promise<Resume[]>
 }

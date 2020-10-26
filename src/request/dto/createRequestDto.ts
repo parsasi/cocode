@@ -9,7 +9,6 @@ export class CreateRequestDto {
     @IsNotEmpty()
     username : string
 
-
     //Category text of the tutoring session
     @IsNotEmpty()
     category: string;

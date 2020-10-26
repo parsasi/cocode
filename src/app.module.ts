@@ -25,6 +25,7 @@ import { RequestModule } from './request/request.module';
 import { SessionModule } from './session/session.module';
 import { AttendModule } from './attend/attend.module';
 import { PurchaseModule } from './purchase/purchase.module';
+import { ResumeModule } from './resume/resume.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { PurchaseModule } from './purchase/purchase.module';
     RequestModule,
     SessionModule,
     AttendModule,
-    PurchaseModule
+    PurchaseModule,
+    ResumeModule
   ],
   controllers: [AppController],
   providers: [
