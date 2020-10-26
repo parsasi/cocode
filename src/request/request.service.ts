@@ -5,6 +5,8 @@ import { Request } from './request.entity'
 import { User } from '../user/user.entity'
 import { Tutor } from '../tutor/tutor.entity'
 import { Category } from '../category/category.entity'
+import { Session } from '../session/session.entity'
+import { SessionService } from '../session/session.service'
 
 interface respondRequestServiceDto{
     tutor : Tutor
@@ -24,6 +26,7 @@ export class RequestService {
     constructor(
         @InjectRepository(Request)
         private requestRepository : Repository<Request>,
+        private sessionService : SessionService,
     ){}
 
     async createRequest(request : createRequestServiceDto) : Promise<InsertResult> {
@@ -33,8 +36,10 @@ export class RequestService {
     async getRequest(condition) : Promise<Request> {
         // return await this.requestRepository.findOne(condition)
 
+
         return await this.requestRepository
         .createQueryBuilder("request")
+        .where("request.id = :id" , {id : condition.id})
         .leftJoinAndSelect("request.tutor", "tutor")
         .leftJoinAndSelect("request.user", "user")
         .leftJoinAndSelect("request.category", "category")
@@ -58,6 +63,14 @@ export class RequestService {
         request = {...request , isAccepted , isClosed : true}
 
         return await this.requestRepository.save(request);
+    }
 
+    async addSession(condition : {id : number} , session : number) : Promise<Request> {
+        
+        const sessionToAdd = await this.sessionService.getSession({id : session})
+
+        const request = await this.getRequest(condition);
+        request.session = sessionToAdd
+        return await this.requestRepository.save(request)
     }
 }
