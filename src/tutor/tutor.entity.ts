@@ -27,11 +27,11 @@ export class Tutor {
   @Column()
   profileVideo : string;
 
-  @OneToOne(type => User , {eager : true})
+  @OneToOne(() => User , {eager : true})
   @JoinColumn()
   user: User;
 
-  @ManyToMany(type => Category , {eager : true})
+  @ManyToMany(() => Category , {eager : true})
   @JoinTable()
   categories: Category[]
 
@@ -44,6 +44,6 @@ export class Tutor {
   @OneToMany(() => Request, request => request.tutor)
   requests : Promise<Request[]>
 
-  @OneToMany(() => Resume, resume => resume.tutor)
+  @OneToMany(() => Resume , resume => resume.tutor)
   resumes : Promise<Resume[]>
 }

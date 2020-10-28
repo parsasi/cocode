@@ -1,5 +1,4 @@
-
-import { Entity, Column, PrimaryGeneratedColumn , OneToMany , CreateDateColumn , JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn , ManyToOne } from 'typeorm';
 import { Tutor } from '../tutor/tutor.entity'
 
 @Entity()
@@ -16,12 +15,15 @@ export class Resume {
   @Column()
   organization : string;
 
+  @Column({default : "EXPERIENCE"})
+  type : string;
+
   @Column()
   endYear : number;
   
   @Column()
   startYear : number;
 
-  @ManyToOne(type => Tutor , tutor => tutor.resumes)
+  @ManyToOne(() => Tutor , tutor => tutor.resumes)
   tutor : Tutor;
 }
