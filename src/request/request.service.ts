@@ -18,7 +18,8 @@ interface createRequestServiceDto{
     category : Category,
     user : User,
     startTime : Date,
-    duration : number
+    duration : number,
+    description : string
 }
 
 @Injectable()
