@@ -11,17 +11,15 @@ export class TutorService {
         private tutorRepository : Repository<Tutor>
     ){}
     
+    //To get the tutor for a specific user, pass in {user : {id : userId }} as your tutor object
     async getTutor(tutor) : Promise<Tutor | void >{
-
-        //To get the tutor for a specific user, pass in {user : {id : userId }} as your tutor object
-
         return await this.tutorRepository.findOne({
                     where : {tutor}
         })
     }
 
+    //Gets a list of tutors with their categories and associated user, filtering by categories
     async getTutorsCategorySearch(categories : number[]) : Promise<Tutor[]>{
-        
         const tutors =  await (await this.tutorRepository
             .createQueryBuilder("tutor")
             .innerJoinAndSelect("tutor.categories", "category" , "category.id in (:...categories)" , {categories})
@@ -52,6 +50,7 @@ export class TutorService {
             .getOne()
     }
 
+    //Creates a tutor account, for the passed in user
     async createTutor(user : User) : Promise<InsertResult>{
         return await this.tutorRepository.insert({user})
     }
