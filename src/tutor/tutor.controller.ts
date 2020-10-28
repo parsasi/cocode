@@ -8,7 +8,6 @@ import { GetTutoUsernamerDto , GetTutorCategoryDto } from './dto/getTutorDto'
 import { CategoryService } from '../category/category.service'
 import { TutorSearchHelperService } from './helpers/tutor-search.helper.service'
 import { Tutor } from './tutor.entity'
-import { Console } from 'console';
 
 @Controller('tutor')
 export class TutorController {

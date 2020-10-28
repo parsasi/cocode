@@ -36,7 +36,6 @@ import { ResumeModule } from './resume/resume.module';
     RatingModule,
     BcryptModule,
     AuthModule,
-    FrontendModule,
     CacheModule.registerAsync({useClass: CacheConfigService}),
     CacheConfigModule,
     TypeOrmConfigModule,
@@ -47,7 +46,8 @@ import { ResumeModule } from './resume/resume.module';
     SessionModule,
     AttendModule,
     PurchaseModule,
-    ResumeModule
+    ResumeModule,
+    FrontendModule,
   ],
   controllers: [AppController],
   providers: [
