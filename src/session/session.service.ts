@@ -30,6 +30,10 @@ interface GetSessionServiceDto {
     username : string
 }
 
+interface GetSessionsServiceDto {
+    username : string
+}
+
 @Injectable()
 export class SessionService {
     constructor(
@@ -82,12 +86,22 @@ export class SessionService {
     }
 
 
-    async getSessionWithUser(condition : GetSessionServiceDto){
+    async getSessionWithUser(condition : GetSessionServiceDto) : Promise<Session>{
+        return await this.sessionRepository
+        .createQueryBuilder("session")
+        .where("user.username = :username" , {username : condition.username})
+        .where("session.uuid = :uuid" , {uuid : condition.uuid})
+        .innerJoinAndSelect("session.attends" , "attend")
+        .innerJoin("attend.user" , "user")
+        .getOne()
+    }
+
+    async getSessionsWithUser(condition : GetSessionsServiceDto) : Promise<Session[]>{
         return await this.sessionRepository
         .createQueryBuilder("session")
         .where("user.username = :username" , {username : condition.username})
         .innerJoinAndSelect("session.attends" , "attend")
         .innerJoin("attend.user" , "user")
-        .getOne()
+        .getMany()
     }
 }

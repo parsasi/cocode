@@ -19,7 +19,11 @@ export class SessionController {
     @UseGuards(JwtAuthGuard)
     @Get('/')
     async getSession(@Query() getSessionDto : GetSessionDto , @Request() req){
-        return await this.sessionService.getSessionWithUser({uuid : getSessionDto.uuid , username : req.user.username})
+        if(getSessionDto.uuid)
+            return await this.sessionService.getSessionWithUser({uuid : getSessionDto.uuid , username : req.user.username})
+        else
+            return await this.sessionService.getSessionsWithUser({username : req.user.username})
+
     }
 
 

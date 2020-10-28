@@ -1,8 +1,8 @@
 
-import {IsNotEmpty } from 'class-validator';
+import { Allow } from 'class-validator';
 
 export class GetSessionDto {
-    @IsNotEmpty()
+    @Allow()
     uuid : string;
 
 }
