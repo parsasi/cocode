@@ -40,6 +40,7 @@ export class RequestHelperService {
         if(tutor && category && user){
             return await this.requestService.createRequest({tutor , category , user , startTime , duration , description})
         }else{
+            console.log(tutor , category , user)
             throw new HttpException("Invalid Input", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
