@@ -25,6 +25,11 @@ interface EndSessionServiceDto {
     tutor : Tutor
 }
 
+interface GetSessionServiceDto {
+    uuid : string , 
+    username : string
+}
+
 @Injectable()
 export class SessionService {
     constructor(
@@ -74,5 +79,15 @@ export class SessionService {
 
         session.isEnded = true
         return await this.sessionRepository.save(session)
+    }
+
+
+    async getSessionWithUser(condition : GetSessionServiceDto){
+        return await this.sessionRepository
+        .createQueryBuilder("session")
+        .where("user.username = :username" , {username : condition.username})
+        .innerJoinAndSelect("session.attends" , "attend")
+        .innerJoin("attend.user" , "user")
+        .getOne()
     }
 }

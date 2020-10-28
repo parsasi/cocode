@@ -1,9 +1,11 @@
-import { Controller , Put , Request , UseGuards , Body , HttpStatus , Response } from '@nestjs/common'
+import { Controller , Put , Get , Request , UseGuards , Body , HttpStatus , Response , Query } from '@nestjs/common'
 import { SessionService } from './session.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { StartSessionDto } from './dto/statrSessionDto'
 import { EndSessionDto } from './dto/endSessionDto'
 import { TutorService } from '../tutor/tutor.service'
+import { GetSessionDto } from './dto/getSessionDto'
+
 
 @Controller('session')
 export class SessionController {
@@ -12,8 +14,16 @@ export class SessionController {
         private tutorService : TutorService
     ){}
 
-    // /start and /end could have been combined into one endpoint, but implementation details are going to be different later
 
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/')
+    async getSession(@Query() getSessionDto : GetSessionDto , @Request() req){
+        return await this.sessionService.getSessionWithUser({uuid : getSessionDto.uuid , username : req.user.username})
+    }
+
+
+    // /start and /end could have been combined into one endpoint, but implementation details are going to be different later
     
     @UseGuards(JwtAuthGuard)
     @Put('/start')
@@ -36,5 +46,6 @@ export class SessionController {
 
         return (await endResult) && res.status(HttpStatus.OK).send()
     }
+
 
 }
