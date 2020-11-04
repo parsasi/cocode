@@ -26,6 +26,7 @@ import { SessionModule } from './session/session.module';
 import { AttendModule } from './attend/attend.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { ResumeModule } from './resume/resume.module';
+import { WebRtcSignalingModule } from './web-rtc-signaling/web-rtc-signaling.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ResumeModule } from './resume/resume.module';
     PurchaseModule,
     ResumeModule,
     FrontendModule,
+    WebRtcSignalingModule,
   ],
   controllers: [AppController],
   providers: [
