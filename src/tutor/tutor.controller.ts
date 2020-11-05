@@ -9,6 +9,7 @@ import { CategoryService } from '../category/category.service'
 import { TutorSearchHelperService } from './helpers/tutor-search.helper.service'
 import { Tutor } from './tutor.entity'
 import { EditTutorDto } from './dto/editTutorDto'
+import { GetTutorVideoDto } from './dto/getTutorVideoDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { VerifyFile , ModifyFile } from './helpers/profile-video-filter.helper'
@@ -77,6 +78,24 @@ export class TutorController {
         const updateTutor = await this.tutorService.updateTutorVideo(uploadedFile.Key , req.user.username)
         
         return updateTutor ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/video')
+    async getTutorVideo(@Query() getTutorVideoDto : GetTutorVideoDto){
+        const tutorVideo = await (await this.tutorService.getTutorUsernameSearch({username : getTutorVideoDto.username})).profileVideo
+        
+        const bucket = await this.awsS3Service.getBucket('cocode-tutor')
+
+        const donwloadParams = {
+            Bucket : bucket.Name,
+            Key : tutorVideo,
+        }
+        
+        const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
+
+        return {url : preSignedUrl}
 
     }
 
