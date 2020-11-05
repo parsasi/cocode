@@ -1,7 +1,7 @@
 
 import { Allow, IsNumber } from 'class-validator';
 
-export class EditUserDto {
+export class EditTutorDto {
   @Allow()
   bioText: string;
 

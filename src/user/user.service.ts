@@ -24,7 +24,7 @@ export class UserService {
         if(user)
             return user
         else
-            new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
+            throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
     }
 
     async getUserByUsername(username : string) : Promise<User | void>{
