@@ -83,10 +83,18 @@ export class TutorController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/video')
-    async getTutorVideo(@Query() getTutorVideoDto : GetTutorVideoDto){
-        const tutorVideo = await (await this.tutorService.getTutorUsernameSearch({username : getTutorVideoDto.username})).profileVideo
+    async getTutorVideo(@Query() getTutorVideoDto : GetTutorVideoDto , @Res() res : Response){
+        const tutor = await this.tutorService.getTutorUsernameSearch({username : getTutorVideoDto.username})
         
+        if(!tutor.profileVideo){
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+        }
+        
+
+        const tutorVideo = tutor.profileVideo;
+
         const bucket = await this.awsS3Service.getBucket('cocode-tutor')
+
 
         const donwloadParams = {
             Bucket : bucket.Name,
@@ -95,7 +103,7 @@ export class TutorController {
         
         const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
 
-        return {url : preSignedUrl}
+        return res.send({url : preSignedUrl})
 
     }
 
