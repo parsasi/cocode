@@ -1,8 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable , HttpException , HttpStatus } from '@nestjs/common';
 import { Tutor } from './tutor.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository , InsertResult  } from 'typeorm'
 import { User } from '../user/user.entity'
+
+interface EditTutorServiceDto {
+    bioText: string,
+    hourlyRate : number,
+    socialUrl : string,
+    profileTitle : string
+}
 
 @Injectable()
 export class TutorService {
@@ -55,4 +62,32 @@ export class TutorService {
         return await this.tutorRepository.insert({user})
     }
 
+    async editTutor(editTutorServiceDto : EditTutorServiceDto , username : string) : Promise<Tutor>{
+
+        const tutorToUpdate : Tutor = await this.tutorRepository
+            .createQueryBuilder("tutor")
+            .innerJoin("tutor.user", "user" , "user.username = :username" , { username: username })
+            .getOne()
+        
+        if(!tutorToUpdate){
+            throw new HttpException('No tutor corresponds to the given username', HttpStatus.NOT_FOUND);
+        }
+
+        const tutor : Tutor = {...tutorToUpdate , ...editTutorServiceDto}
+
+        return await this.tutorRepository.save(tutor)
+    }
+
+    async updateTutorVideo(key : string , username : string) : Promise<Tutor> {
+        const tutorToUpdate : Tutor = await this.tutorRepository
+            .createQueryBuilder("tutor")
+            .innerJoin("tutor.user", "user" , "user.username = :username" , { username })
+            .getOne()
+       
+            if(!tutorToUpdate){
+            throw new HttpException('No tutor corresponds to the given username', HttpStatus.NOT_FOUND);
+        }
+        const tutor = {...tutorToUpdate , profileVideo : key}
+        return await this.tutorRepository.save(tutor)
+    }
 }
