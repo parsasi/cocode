@@ -27,6 +27,7 @@ import { AttendModule } from './attend/attend.module';
 import { PurchaseModule } from './purchase/purchase.module';
 import { ResumeModule } from './resume/resume.module';
 import { WebRtcSignalingModule } from './web-rtc-signaling/web-rtc-signaling.module';
+import { CodeJarModule } from './code-jar/code-jar.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { WebRtcSignalingModule } from './web-rtc-signaling/web-rtc-signaling.mod
     ResumeModule,
     FrontendModule,
     WebRtcSignalingModule,
+    CodeJarModule,
   ],
   controllers: [AppController],
   providers: [
