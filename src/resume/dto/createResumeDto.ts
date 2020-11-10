@@ -1,6 +1,7 @@
-import { IsNotEmpty , Allow , IsNumber , Min , Max } from 'class-validator';
+import { IsNotEmpty , Allow , IsNumber , Min , Max , IsOptional } from 'class-validator';
 
 const currentYear = new Date().getFullYear();
+
 
 export class CreateResumeDto {
     @IsNotEmpty()
@@ -21,6 +22,7 @@ export class CreateResumeDto {
     @IsNumber()
     startYear : number
 
+    @IsOptional()
     @Min(currentYear - 100)
     @Max(currentYear)
     @IsNumber()
