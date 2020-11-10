@@ -3,13 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository , InsertResult } from 'typeorm'
 import { Resume } from './resume.entity'
 import { TutorService } from '../tutor/tutor.service'
-
+import { Types } from './resumeTypes'
 
 interface AddResumeServiceDto{
     title : string,
     description : string,
     organization : string,
-    type : 'EXPERIENCE' | 'EDUCATION',
+    type : Types,
     startYear : number,
     endYear : number, 
 }

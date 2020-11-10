@@ -1,4 +1,5 @@
-import { IsNotEmpty , Allow , IsNumber , Min , Max , IsOptional } from 'class-validator';
+import { IsNotEmpty , Allow , IsNumber , Min , Max , IsOptional , IsEnum } from 'class-validator';
+import { Types } from '../resumeTypes'
 
 const currentYear = new Date().getFullYear();
 
@@ -13,8 +14,8 @@ export class CreateResumeDto {
     @Allow()
     organization : string
 
-    @Allow()
-    type : 'EXPERIENCE' | 'EDUCATION'
+    @IsEnum(Types)
+    type : Types
 
     @Min(currentYear - 100)
     @Max(currentYear)
