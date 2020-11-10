@@ -20,7 +20,7 @@ export class ResumeController {
 
     @Delete('/')
     @UseGuards(JwtAuthGuard)
-    async deleteResume(@Body() deleteResumeDto : DeleteResumeDto , @Request() req , @Response() res){
+    async deleteResume(@Body() deleteResumeDto : DeleteResumeDto , @Request() req , @Response() res){ 
         const deleteResult = await this.resumeService.deleteResumeItem({id : deleteResumeDto.id }, req.user.username)
 
         //If the item does not exist or if the item doesn't belong to the tutor logged-in, deleteResult.affected will carry a 0 value
