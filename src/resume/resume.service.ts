@@ -14,6 +14,11 @@ interface AddResumeServiceDto{
     endYear : number, 
 }
 
+
+interface DeleteResumeServiceDto {
+    id : number
+}
+
 @Injectable()
 export class ResumeService {
     constructor(
@@ -38,4 +43,18 @@ export class ResumeService {
         return await this.resumeRepository.insert(newResume)
 
     }
+
+    async deleteResumeItem(deleteResumeServiceDto : DeleteResumeServiceDto , username : string){
+        const tutor = await this.tutorService.getTutorUsernameSearch({username})
+
+        return await this.resumeRepository
+                .createQueryBuilder('resume')
+                .leftJoin('resume.tutor' , 'tutor')
+                .delete()
+                .from('resume')
+                .where("resume.tutor = :tutor" , {tutor})
+                .where("id = :id", { id: deleteResumeServiceDto.id })
+                .execute();
+    }
+    
 }
