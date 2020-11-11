@@ -2,16 +2,17 @@ read -p "Enter the heroku project name: " remote
 read -p "Enter the commit message: " commit
 
 cd ../
-mkdir ../co-code-production
-cp -r co-code/* ../co-code-production
-cd ../co-code-production
+mkdir ./co-code-production
+cp -r co-code/* ./co-code-production
+cp co-code/.gitignore ./co-code-production
+cd ./co-code-production
 npm i
 nest build
 git init
 git add .
-git add /dist
+git add -f dist
 git commit -m '$commit'
 heroku git:remote -a $remote
-git push heroku master
+git push -f heroku master
 cd ../
 rm -rf co-code-production
