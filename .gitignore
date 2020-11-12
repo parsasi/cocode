@@ -55,4 +55,4 @@ public/coverage
 /src/auth/constant.ts
 
 #AWS Credintials
-/src/aws.config.json
+aws.config.json

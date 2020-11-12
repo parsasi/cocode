@@ -6,7 +6,7 @@ export class AwsS3Service {
     private AwsS3;
 
     constructor(){
-        AWS.config.loadFromPath('./src/aws.config.json');
+        AWS.config.loadFromPath('./aws.config.json');
         this.AwsS3 = new AWS.S3({apiVersion: '2006-03-01'});
     }
 
@@ -16,7 +16,7 @@ export class AwsS3Service {
             // credentials not loaded
             else {
                 console.log(AWS.config.credentials.accessKeyId)
-            }
+            }   
           });
     }
 
