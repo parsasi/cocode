@@ -28,6 +28,7 @@ import { PurchaseModule } from './purchase/purchase.module';
 import { ResumeModule } from './resume/resume.module';
 import { WebRtcSignalingModule } from './web-rtc-signaling/web-rtc-signaling.module';
 import { CodeJarModule } from './code-jar/code-jar.module';
+import { CorsMiddleware } from './common/middlewares/corsMiddleware'
 
 @Module({
   imports: [
@@ -78,5 +79,10 @@ export class AppModule {
     consumer
       .apply(FrontendMiddleware)
       .forRoutes(FrontendController);
+      
+    //For development phase, it might be neccessery to deactivate CORS policy, in order for the client app to be able req to server 
+    // consumer
+    // .apply(CorsMiddleware)
+    // .forRoutes('*');
   }
 }

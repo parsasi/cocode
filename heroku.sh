@@ -16,4 +16,4 @@ git commit -m '$commit'
 heroku git:remote -a $remote
 git push -f heroku master
 cd ../
-# rm -rf co-code-production
+rm -rf co-code-production
