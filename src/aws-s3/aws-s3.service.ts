@@ -16,7 +16,7 @@ export class AwsS3Service {
             // credentials not loaded
             else {
                 console.log(AWS.config.credentials.accessKeyId)
-            }
+            }   
           });
     }
 
