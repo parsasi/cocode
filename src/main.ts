@@ -23,14 +23,14 @@ async function bootstrap() {
 
   const port = configService.get('PORT')
 
+  //Disables CORS policy based on the enviroment variable DISBALE_CORS
   const disableCORS = configService.get('DISABLE_CORS')
 
   if(disableCORS === "true")
-  {
     app.enableCors(configCORS)
-  }else{
+  else
     console.log(disableCORS)
-  }
+  
 
   await app.listen(port);
 }
