@@ -1,13 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import AWS = require('aws-sdk');
+import { ConfigService } from '@nestjs/config'
+
 
 @Injectable()
 export class AwsS3Service {
     private AwsS3;
 
-    constructor(){
-        AWS.config.loadFromPath('./aws.config.json');
+    constructor(
+        private configService : ConfigService
+    ){
+        this.ConfigCredintials()
         this.AwsS3 = new AWS.S3({apiVersion: '2006-03-01'});
+    }
+
+    ConfigCredintials(){
+        AWS.config.update({
+            accessKeyId : this.configService.get('AWS_ACCESS_KEY_ID'),
+            secretAccessKey : this.configService.get('AWS_SECRET_ACCESS_KEY'),
+            region : this.configService.get('AWS_REGION')
+        })
     }
 
     ConfirmCredentials(){

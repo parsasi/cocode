@@ -11,7 +11,6 @@ nest build
 git init
 git add .
 git add -f dist
-cp aws.config.json dist
 git commit -m '$commit'
 heroku git:remote -a $remote
 git push -f heroku master
