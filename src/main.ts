@@ -5,7 +5,14 @@ import { ConfigService } from '@nestjs/config'
 
 
 async function bootstrap() {
-  
+
+
+  const configCORS = {
+    origin : '*',
+    methods: 'GET,POST,PUT,PATCH,DELETE',
+    preflightContinue : false,
+  }
+
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({
@@ -15,6 +22,15 @@ async function bootstrap() {
   const configService: ConfigService = app.get(ConfigService);
 
   const port = configService.get('PORT')
+
+  //Disables CORS policy based on the enviroment variable DISBALE_CORS
+  const disableCORS = configService.get('DISABLE_CORS')
+
+  if(disableCORS === "true")
+    app.enableCors(configCORS)
+  else
+    console.log(disableCORS)
+  
 
   await app.listen(port);
 }
