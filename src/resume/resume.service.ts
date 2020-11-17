@@ -28,6 +28,11 @@ interface DeleteResumeServiceDto {
     id : number
 }
 
+
+interface GetTutorResumeServiceDto{
+    username : string
+}
+
 @Injectable()
 export class ResumeService {
     constructor(
@@ -89,6 +94,15 @@ export class ResumeService {
 
         this.resumeRepository.save(resume)
 
+    }
+
+    async getTutorResume(userResumeServiceDto : GetTutorResumeServiceDto){
+
+        //Getting the tutor for the given username
+        const tutor = await this.tutorService.getTutorUsernameSearch({username : userResumeServiceDto.username})
+
+        
+        return await this.resumeRepository.find({tutor : tutor})
     }
     
 }
