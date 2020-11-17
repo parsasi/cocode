@@ -16,7 +16,7 @@ import { AwsS3Module } from '../aws-s3/aws-s3.module'
     TypeOrmModule.forFeature([Tutor]),
     forwardRef(() => UserModule),
     CategoryModule,
-    AwsS3Module
+    AwsS3Module,
   ],
   exports: [TutorService]
 })

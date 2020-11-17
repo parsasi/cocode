@@ -5,27 +5,27 @@ const currentYear = new Date().getFullYear();
 
 
 export class UpdateResumeDto {
-    @IsNumber()
-    id : number;
+        @IsNumber()
+        id : number;
 
-    title : string
+        title : string
 
-    @Allow()
-    description : string
+        @Allow()
+        description : string
 
-    @Allow()
-    organization : string
+        @Allow()
+        organization : string
 
-    @IsOptional()
-    @Min(currentYear - 100)
-    @Max(currentYear)
-    @IsNumber()
-    startYear : number
+        @IsOptional()
+        @Min(currentYear - 100)
+        @Max(currentYear)
+        @IsNumber()
+        startYear : number
 
-    @IsOptional()
-    @Min(currentYear - 100)
-    @Max(currentYear)
-    @IsNumber()
-    endYear : number
+        @IsOptional()
+        @Min(currentYear - 100)
+        @Max(currentYear)
+        @IsNumber()
+        endYear : number
 
 }
