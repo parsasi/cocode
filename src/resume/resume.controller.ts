@@ -1,15 +1,15 @@
-import { Controller , Post , UseGuards , Body , Request , Delete , Response, HttpStatus, Put } from '@nestjs/common'
+import { Controller , Post , UseGuards , Body , Request , Delete , Response, HttpStatus, Put, Get } from '@nestjs/common'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ResumeService } from './resume.service'
 import { CreateResumeDto } from './dto/createResumeDto'
 import { DeleteResumeDto } from './dto/deleteResumeDto'
 import { UpdateResumeDto } from './dto/updateResumeDto'
-
+import { GetTutorResumeDto } from './dto/getTutorResumeDto'
 
 @Controller('resume')
 export class ResumeController {
     constructor(
-        private resumeService : ResumeService
+        private resumeService : ResumeService,
     ){}
 
 
@@ -32,6 +32,12 @@ export class ResumeController {
     @UseGuards(JwtAuthGuard)
     async updateResume(@Body() updateResumeDto : UpdateResumeDto , @Request() req){
         return await this.resumeService.updateResumeItem(updateResumeDto , req.user.username)
+    }
+
+    @Get('/tutor')
+    @UseGuards(JwtAuthGuard)
+    async getTutorResume(@Body() getTutorResumeDto : GetTutorResumeDto){
+        return await this.resumeService.getTutorResume({username : getTutorResumeDto.username})
     }
 
 }
