@@ -1,8 +1,9 @@
-import { Controller , Post , UseGuards , Body , Request , Delete , Response, HttpStatus } from '@nestjs/common'
+import { Controller , Post , UseGuards , Body , Request , Delete , Response, HttpStatus, Put } from '@nestjs/common'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { ResumeService } from './resume.service'
 import { CreateResumeDto } from './dto/createResumeDto'
 import { DeleteResumeDto } from './dto/deleteResumeDto'
+import { UpdateResumeDto } from './dto/updateResumeDto'
 
 
 @Controller('resume')
@@ -26,4 +27,11 @@ export class ResumeController {
         //If the item does not exist or if the item doesn't belong to the tutor logged-in, deleteResult.affected will carry a 0 value
         return deleteResult.affected > 0 ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.NOT_FOUND).send()
     }
+
+    @Put('/')
+    @UseGuards(JwtAuthGuard)
+    async updateResume(@Body() updateResumeDto : UpdateResumeDto , @Request() req){
+        return await this.resumeService.updateResumeItem(updateResumeDto , req.user.username)
+    }
+
 }

@@ -15,6 +15,15 @@ interface AddResumeServiceDto{
 }
 
 
+interface UpdateResumeServiceDto {
+    id : number,
+    title : string,
+    description : string,
+    organization : string,
+    startYear : number,
+    endYear : number,
+}
+
 interface DeleteResumeServiceDto {
     id : number
 }
@@ -45,8 +54,10 @@ export class ResumeService {
     }
 
     async deleteResumeItem(deleteResumeServiceDto : DeleteResumeServiceDto , username : string){
+        //Gets the tutor for username inputted, which is meant to be the user that is signed in
         const tutor = await this.tutorService.getTutorUsernameSearch({username})
 
+        //Deletes the resume item that belongs to the tutor found, with the id given
         return await this.resumeRepository
                 .createQueryBuilder('resume')
                 .leftJoin('resume.tutor' , 'tutor')
@@ -55,6 +66,29 @@ export class ResumeService {
                 .where("resume.tutor = :tutor" , {tutor})
                 .where("id = :id", { id: deleteResumeServiceDto.id })
                 .execute();
+    }
+
+    async updateResumeItem(updateResumeServiceDto : UpdateResumeServiceDto , username : string){
+
+        //Gets the tutor for username inputted, which is meant to be the user that is signed in
+        const tutor = await this.tutorService.getTutorUsernameSearch({username})
+
+
+        //Finds the resume item that belongs to the tutor found, with the id given
+        let resume = await this.resumeRepository
+                .createQueryBuilder('resume')
+                .where("resume.tutor = :tutor" , {tutor})
+                .where("resume.id = :id", { id: updateResumeServiceDto.id })
+                .leftJoin('resume.tutor' , 'tutor')
+                .getOne()
+
+        
+                
+        //Updates the resume with the new data        
+        resume = {...resume , ...updateResumeServiceDto}
+
+        this.resumeRepository.save(resume)
+
     }
     
 }
