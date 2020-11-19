@@ -1,15 +1,17 @@
-import { Controller, Post , UseGuards , Body , Request , Delete , Response , HttpStatus } from '@nestjs/common'
+import { Controller, Post , UseGuards , Body , Request , Delete , Response , HttpStatus, Get, Query } from '@nestjs/common'
 import { RatingService } from './rating.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { CreateRatingDto } from './dto/createRatingDto'
 import { DeleteRatingDto } from './dto/deleteRatingDto'
+import { GetTutorRatingsDto } from './dto/getTutorRatingsDto'
 
 @Controller('rating')
 export class RatingController {
     constructor(
         private ratingService : RatingService
+
     ){}
-    
+
     @UseGuards(JwtAuthGuard)
     @Post('/')
     async createRating(@Body() createRatingDto : CreateRatingDto , @Request() req){
@@ -25,6 +27,13 @@ export class RatingController {
         //To delete the row(s) remove() is used instead of delete() which returns an array of deleted rows, not a DeleteResult object 
         //Refer to RatingService.deleteRating for more explanation 
         return deleteResult.length > 0 ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.NOT_FOUND).send()
-
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/')
+    async getTutorRatings(@Query() getTutorRatingsDto : GetTutorRatingsDto ){
+        return await this.ratingService.getTutorRatings(getTutorRatingsDto)
+    }
+
+    
 }
