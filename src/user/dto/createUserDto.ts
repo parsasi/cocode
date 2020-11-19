@@ -1,5 +1,4 @@
 
-import { All } from '@nestjs/common';
 import { IsEmail, IsNotEmpty , Allow } from 'class-validator';
 
 export class CreateUserDto {
