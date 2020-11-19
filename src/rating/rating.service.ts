@@ -61,22 +61,15 @@ export class RatingService {
         return await this.ratingRepository.insert(newRating)
     }
 
-    async deleteRating(deleteRatingServiceDto : DeleteRatingServiceDto , username : string) : Promise<any>{
-        
-        const records =  await this.ratingRepository.createQueryBuilder('rating')
+    async deleteRating(deleteRatingServiceDto : DeleteRatingServiceDto , username : string) : Promise<Rating[]>{   
+        //TypeOrm does not support joins in delete statements. To work around that, we select the rows first and delete them using remove()
+        // Note that remove returns an array of removed rows, not a DeleteResult object, so it needs to be treated differently inside the controller    
+        const ratingToDelete =  await this.ratingRepository.createQueryBuilder('rating')
             .innerJoin('rating.user' , 'user')
             .where("user.username = :username AND rating.id = :id" , { username ,  id: deleteRatingServiceDto.id  })
             .getMany();
 
-            console.log(records)
-
-
-        // return this.ratingRepository.createQueryBuilder('rating')
-        //         .innerJoin('rating.user' , 'user' , "user.username = :username" , { username })
-        //         .delete()
-        //         .from('rating')
-        //         .where("rating.id = :id", { id: deleteRatingServiceDto.id })
-        //         .execute();
+        return await this.ratingRepository.remove(ratingToDelete)
 
     }
 }
