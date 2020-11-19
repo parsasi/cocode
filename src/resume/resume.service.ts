@@ -58,19 +58,17 @@ export class ResumeService {
 
     }
 
-    async deleteResumeItem(deleteResumeServiceDto : DeleteResumeServiceDto , username : string){
-        //Gets the tutor for username inputted, which is meant to be the user that is signed in
-        const tutor = await this.tutorService.getTutorUsernameSearch({username})
+    async deleteResumeItem(deleteResumeServiceDto : DeleteResumeServiceDto , username : string) : Promise<Resume[]>{
 
         //Deletes the resume item that belongs to the tutor found, with the id given
-        return await this.resumeRepository
-                .createQueryBuilder('resume')
-                .leftJoin('resume.tutor' , 'tutor')
-                .delete()
-                .from('resume')
-                .where("resume.tutor = :tutor" , {tutor})
-                .where("id = :id", { id: deleteResumeServiceDto.id })
-                .execute();
+        const resumes = await this.resumeRepository
+                    .createQueryBuilder('resume')
+                    .innerJoin('resume.tutor' , 'tutor')
+                    .innerJoin('tutor.user' , 'user' , "user.username = :username" , {username})
+                    .where("resume.id = :id", { id: deleteResumeServiceDto.id })
+                    .getMany();
+
+        return await this.resumeRepository.remove(resumes)
     }
 
     async updateResumeItem(updateResumeServiceDto : UpdateResumeServiceDto , username : string){

@@ -86,5 +86,5 @@ export class RatingService {
 
             
             return ratings
-        }
+    }
 }
