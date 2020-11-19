@@ -24,8 +24,8 @@ export class ResumeController {
     async deleteResume(@Body() deleteResumeDto : DeleteResumeDto , @Request() req , @Response() res){ 
         const deleteResult = await this.resumeService.deleteResumeItem({id : deleteResumeDto.id }, req.user.username)
 
-        //If the item does not exist or if the item doesn't belong to the tutor logged-in, deleteResult.affected will carry a 0 value
-        return deleteResult.affected > 0 ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.NOT_FOUND).send()
+        //If the item does not exist or if the item doesn't belong to the tutor logged-in, the length of delete result will be 0
+        return deleteResult.length ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.NOT_FOUND).send()
     }
 
     @Put('/')
