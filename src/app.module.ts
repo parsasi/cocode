@@ -49,15 +49,14 @@ import { CodeJarModule } from './code-jar/code-jar.module';
     AttendModule,
     PurchaseModule,
     ResumeModule,
-    FrontendModule,
     WebRtcSignalingModule,
     CodeJarModule,
+    FrontendModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     FrontendService,
-    TutorService,
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,

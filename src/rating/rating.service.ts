@@ -17,6 +17,10 @@ interface DeleteRatingServiceDto {
     id : number
 }
 
+interface GetTutorRatingsServiceDto {
+    username : string
+}
+
 
 @Injectable()
 export class RatingService {
@@ -72,4 +76,15 @@ export class RatingService {
         return await this.ratingRepository.remove(ratingToDelete)
 
     }
+
+    async getTutorRatings(getTutorRatingsServiceDto : GetTutorRatingsServiceDto) : Promise<Rating[]> {
+            const ratings = await this.ratingRepository
+                        .createQueryBuilder('rating')
+                        .innerJoin('rating.tutor' , 'tutor')
+                        .innerJoin('tutor.user' , 'user' , 'user.username = :username' , {username : getTutorRatingsServiceDto.username})
+                        .getMany()
+
+            
+            return ratings
+        }
 }
