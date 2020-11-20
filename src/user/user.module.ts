@@ -8,6 +8,7 @@ import { UserController } from './user.controller';
 import { BcryptModule } from '../bcrypt/bcrypt.module'
 import { AwsModule } from '../aws/aws.module'
 import { TutorModule } from '../tutor/tutor.module'
+import { ProfilePhotoHelperService } from './helpers/profile-photo.helper.service'
 
 @Module({
     imports : [
@@ -17,7 +18,10 @@ import { TutorModule } from '../tutor/tutor.module'
         forwardRef(() => TutorModule)
     ],
     exports : [TypeOrmModule , UserService],
-    providers: [UserService],
+    providers: [
+        UserService,
+        ProfilePhotoHelperService,
+    ],
     controllers: [UserController]
 })
 export class UserModule {}

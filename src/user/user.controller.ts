@@ -1,4 +1,4 @@
-import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res, Put , UploadedFile , UseInterceptors , forwardRef, Inject  } from '@nestjs/common';
+import { Controller  , Post , Body, Get, Query , UseGuards , Request , HttpStatus , Res, Put , UploadedFile , UseInterceptors} from '@nestjs/common';
 import { Response } from 'express'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { UserService } from './user.service'
@@ -7,15 +7,17 @@ import { UserExistsUsernameDto , UserExistsEmailDto } from './dto/userExistsDto'
 import { User } from './user.entity'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { EditUserDto } from './dto/editUserDto'
-import { AwsS3Service } from '../aws-s3/aws-s3.service'
-import { VerifyFile , ModifyFile } from './helpers/profile-photo-filter.helper'
+import { VerifyFile } from './helpers/profile-photo-filter.helper'
 import { GetUserPhotoDto } from './dto/getUserPhotoDto'
+import { ProfilePhotoHelperService } from './helpers/profile-photo.helper.service'
+import { GetUserDto } from './dto/getUserDto'
+
 
 @Controller('user')
 export class UserController {
     constructor(
         private userService : UserService,
-        private awsS3Service : AwsS3Service,
+        private profilePhotoHelperService : ProfilePhotoHelperService
     ){}
 
     @Post('/create')
@@ -25,7 +27,7 @@ export class UserController {
 
     @Get('/exists')
     async userExists(@Query() userExistsDto : UserExistsUsernameDto | UserExistsEmailDto){
-        let user : User | void;
+        let user : User;
         if('username' in userExistsDto)
             user = await this.userService.getUserByUsername(userExistsDto.username)
         else
@@ -53,18 +55,10 @@ export class UserController {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
         }
 
-        file = ModifyFile(file)
+        //Uploades the photo to AWS S3 and retuns an object containing the key
+        const uploadedFile = await this.profilePhotoHelperService.uploadProfilePhoto(file)
 
-        const bucket = await this.awsS3Service.getBucket('cocode-profile')
-        
-        const uploadParams = {
-            Bucket : bucket.Name,
-            Body : file.buffer,
-            Key : file.originalname, //Generated uuid inside ModifyFile
-        }
-
-        const uploadedFile = await this.awsS3Service.upload(uploadParams)
-
+        //Updates users' profile to add the key from AWS S3 to 
         const userUpdate = await this.userService.updateUserPhoto(uploadedFile.Key , req.user.sub)
         
         return userUpdate ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
@@ -74,17 +68,15 @@ export class UserController {
     @Get('/photo')
     async getProfilePhoto(@Query() getUserPhotoDto : GetUserPhotoDto){
         const userPhotoKey = await this.userService.getUserPhoto(getUserPhotoDto.username)
-        
-        const bucket = await this.awsS3Service.getBucket('cocode-profile')
-        
-        const donwloadParams = {
-            Bucket : bucket.Name,
-            Key : userPhotoKey,
-        }
 
-        const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
+        const preSignedUrl = await this.profilePhotoHelperService.getProfilePhoto(userPhotoKey)
 
         return {url : preSignedUrl}
-    }
+    }   
 
+    @Get('/')
+    @UseGuards(JwtAuthGuard)
+    async getProfile(@Query() getUserDto : GetUserDto){
+        return await this.userService.getUser(getUserDto)
+    }
 }

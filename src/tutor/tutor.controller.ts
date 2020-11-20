@@ -29,7 +29,7 @@ export class TutorController {
     @Post('/create')
     async createTutor(@Request() req , @Res() res: Response){
         //fetching the user associated with the tutor
-        const user : User | void = await this.userService.getUserByUsername(req.user.username)
+        const user : User = await this.userService.getUserByUsername(req.user.username)
         if(user){
             const insertResults = await this.tutorService.createTutor(user)
             return await insertResults && res.status(HttpStatus.CREATED).send()
