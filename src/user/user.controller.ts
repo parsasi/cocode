@@ -55,17 +55,7 @@ export class UserController {
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send()
         }
 
-        file = ModifyFile(file)
-
-        const bucket = await this.awsS3Service.getBucket('cocode-profile')
-        
-        const uploadParams = {
-            Bucket : bucket.Name,
-            Body : file.buffer,
-            Key : file.originalname, //Generated uuid inside ModifyFile
-        }
-
-        const uploadedFile = await this.awsS3Service.upload(uploadParams)
+        const uploadedFile = await this.profilePhotoHelperService.uploadProfilePhoto(file)
 
         const userUpdate = await this.userService.updateUserPhoto(uploadedFile.Key , req.user.sub)
         
@@ -76,7 +66,6 @@ export class UserController {
     @Get('/photo')
     async getProfilePhoto(@Query() getUserPhotoDto : GetUserPhotoDto){
         const userPhotoKey = await this.userService.getUserPhoto(getUserPhotoDto.username)
-        
 
         const preSignedUrl = await this.profilePhotoHelperService.getProfilePhoto(userPhotoKey)
 
