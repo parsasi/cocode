@@ -65,4 +65,36 @@ export class AttendService {
 
         return attend
     }   
+
+    async getUserAttend(username : string) : Promise<Attend[]>{
+        const columnsToSelect = [
+            "attend.isAttended",
+            "session.uuid",
+            "session.startTime",
+            "session.duration",
+            "session.isStarted",
+            "session.isEnded",
+            "session.rate",
+            "session.codejarPublicUrl",
+            "tutor.profileTitle",
+            "tutorUser.username",
+            "tutorUser.firstName",
+            "tutorUser.lastName",
+        ]
+
+
+        //tutorUser is an alias used, becuase the user table is being refrenced twice, with two different purposes 
+        //Visit https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md for more info on aliases
+        const attend = await this.attendRepository
+        .createQueryBuilder('attend')
+        .where("user.username = :username" , {username : username})
+        .leftJoin('attend.user' , 'user')
+        .leftJoinAndSelect('attend.session' , 'session')
+        .leftJoinAndSelect('session.tutor' , 'tutor')
+        .leftJoinAndSelect('tutor.user' , 'tutorUser')
+        .select(columnsToSelect)
+        .getMany()
+
+        return attend
+    }  
 }
