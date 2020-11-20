@@ -3,14 +3,22 @@ import { InjectRepository  } from '@nestjs/typeorm'
 import { Repository , InsertResult} from 'typeorm';
 import { User } from './user.entity'
 import { BcryptService } from '../bcrypt/bcrypt.service'
+import { ProfilePhotoHelperService } from './helpers/profile-photo.helper.service'
+
+interface GetUserServiceDto{
+    username : string
+}
+
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository : Repository<User>,
-        private bcryptService : BcryptService
+        private bcryptService : BcryptService,
+        private profilePhotoHelperService : ProfilePhotoHelperService
     ){}
+    
 
     async createUser(user) : Promise<InsertResult> {
         const hashedPassword = await this.bcryptService.hash(user.password)
@@ -27,7 +35,7 @@ export class UserService {
             throw new HttpException('User with this email does not exist', HttpStatus.NOT_FOUND);
     }
 
-    async getUserByUsername(username : string) : Promise<User | void>{
+    async getUserByUsername(username : string) : Promise<User>{
         const user : User  = await this.userRepository.findOne({username})
         return user
     }
@@ -62,12 +70,41 @@ export class UserService {
             .leftJoinAndSelect("user.tutor", "tutor")
             .getMany())
             .map(item => {
-                // This needs to be done inside the query not manually and outside of it 
-                // TypeOrm docs do not mention any feature to define which columns to select from the joined table
                 delete item.hashedPassword
-                delete item.balance
+                delete item.id
                 return item
             });
 
     }
+
+    async getUser(getUserServiceDto : GetUserServiceDto) : Promise<User>{
+
+        const columnsToSelect = [
+            "user.username",
+            "user.profilePhoto",
+            "user.firstName",
+            "user.lastName",
+            "tutor.bioText",
+            "tutor.hourlyRate",
+            "tutor.socialUrl",
+            "tutor.profileTitle"
+        ]
+
+
+        const user = await this.userRepository
+            .createQueryBuilder("user")
+            .select(columnsToSelect)
+            .where("user.username = :username", { username : getUserServiceDto.username })
+            .leftJoinAndSelect("user.tutor", "tutor")
+            .getOne()
+
+        if(user && user.profilePhoto){
+            const photoUrl = await this.profilePhotoHelperService.getProfilePhoto(user.profilePhoto)
+            user.profilePhoto = photoUrl
+            return user
+        }
+
+        return user
+    }
+
 }
