@@ -1,11 +1,13 @@
-import { Body, Controller, Put, UseGuards , Request } from '@nestjs/common'
+import { Body, Controller, Put, UseGuards , Request, Get, Query } from '@nestjs/common'
 import { AttendHelperService } from './helpers/attend.helper.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { AttendService } from './attend.service'
 import { SetUserAttendDto } from './dto/setUserAttendDto'
 
 @Controller('attend')
 export class AttendController {
     constructor(
+        private attendService : AttendService,
         private attendHelperService : AttendHelperService
     ){}
 
@@ -15,4 +17,9 @@ export class AttendController {
         return await this.attendHelperService.setUserAttend({uuid : setUserAttendDto.uuid , username : req.user.username})
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('/user')
+    async getUserAttend(@Request() req){
+        return await this.attendService.getUserAttend(req.user.username)
+    }
 }
