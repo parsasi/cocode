@@ -10,12 +10,14 @@ import { EditUserDto } from './dto/editUserDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
 import { VerifyFile , ModifyFile } from './helpers/profile-photo-filter.helper'
 import { GetUserPhotoDto } from './dto/getUserPhotoDto'
+import { ProfilePhotoHelperService } from './helpers/profile-photo.helper.service'
 
 @Controller('user')
 export class UserController {
     constructor(
         private userService : UserService,
         private awsS3Service : AwsS3Service,
+        private profilePhotoHelperService : ProfilePhotoHelperService
     ){}
 
     @Post('/create')
@@ -75,16 +77,12 @@ export class UserController {
     async getProfilePhoto(@Query() getUserPhotoDto : GetUserPhotoDto){
         const userPhotoKey = await this.userService.getUserPhoto(getUserPhotoDto.username)
         
-        const bucket = await this.awsS3Service.getBucket('cocode-profile')
-        
-        const donwloadParams = {
-            Bucket : bucket.Name,
-            Key : userPhotoKey,
-        }
 
-        const preSignedUrl = await this.awsS3Service.getPresignedUrl(donwloadParams)
+        const preSignedUrl = await this.profilePhotoHelperService.getProfilePhoto(userPhotoKey)
 
         return {url : preSignedUrl}
-    }
+    }   
 
+    // @Get('/')
+    // async getProfile()
 }
