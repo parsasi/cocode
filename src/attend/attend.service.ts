@@ -83,6 +83,8 @@ export class AttendService {
         ]
 
 
+        //tutorUser is an alias used, becuase the user table is being refrenced twice, with two different purposes 
+        //Visit https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md for more info on aliases
         const attend = await this.attendRepository
         .createQueryBuilder('attend')
         .where("user.username = :username" , {username : username})
