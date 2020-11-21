@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, HttpStatus , Body , Request , Put , Response } from '@nestjs/common';
+import { Controller, Post, UseGuards, HttpStatus , Body , Request , Put , Response, Get } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { CreateRequestDto } from './dto/createRequestDto'
 import { RequestHelperService } from './helpers/request.helper.service'
@@ -40,6 +40,12 @@ export class RequestController {
 
         return await requestRespondResult && res.status(HttpStatus.OK).send()
 
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/user')
+    async getUserRequest(@Request() req){
+        return await this.requestService.getUserRequest({username : req.user.username})
     }
 
 }
