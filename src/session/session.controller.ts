@@ -16,6 +16,8 @@ export class SessionController {
 
 
 
+    //Gets session(s) of a user
+    //providing uuid of a session will return that one specific session
     @UseGuards(JwtAuthGuard)
     @Get('/')
     async getSession(@Query() getSessionDto : GetSessionDto , @Request() req){
@@ -51,5 +53,10 @@ export class SessionController {
         return (await endResult) && res.status(HttpStatus.OK).send()
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('/user')
+    async getTutorSession(@Request() req){
+        return await this.sessionService.getTutorSession({username : req.user.username})
+    }
 
 }
