@@ -26,6 +26,10 @@ interface GetUserRequestServiceDto{
     username : string
 }
 
+interface GetTutorRequestServiceDto{
+    username : string
+}
+
 @Injectable()
 export class RequestService {
     constructor(
@@ -98,13 +102,38 @@ export class RequestService {
         //tutorUser is an alias used, becuase the user table is being refrenced twice, with two different context 
         //Visit https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md for more info on aliases
         return await this.requestRepository
-                    .createQueryBuilder('request')
-                    .where('user.username = :username' , {username : getUserRequestServiceDto.username})
-                    .where('request.isClosed = :isClosed' , {isClosed : false})
-                    .leftJoin('request.user' , 'user')
-                    .leftJoinAndSelect('request.tutor' , 'tutor')
-                    .innerJoinAndSelect('tutor.user' , 'tutorUser')
-                    .select(columnsToSelect)
-                    .getMany()
+                .createQueryBuilder('request')
+                .where('user.username = :username' , {username : getUserRequestServiceDto.username})
+                .where('request.isClosed = :isClosed' , {isClosed : false})
+                .leftJoin('request.user' , 'user')
+                .leftJoinAndSelect('request.tutor' , 'tutor')
+                .innerJoinAndSelect('tutor.user' , 'tutorUser')
+                .select(columnsToSelect)
+                .getMany()
+    }
+
+    async getTutorRequest(getTutorRequestServiceDto : GetTutorRequestServiceDto){
+        const columnsToSelect = [
+            "request.id",
+            "request.isAccepted",
+            "request.startTime",
+            "request.duration",
+            "request.description",
+            "user.firstName",
+            "user.lastName",
+            "user.username",
+            "category.text",
+        ] 
+        
+        return await this.requestRepository
+                .createQueryBuilder('request')
+                .where('tutorUser.username = :username' , {username : getTutorRequestServiceDto.username})
+                .where('request.isClosed = :isClosed' , {isClosed : false})
+                .leftJoinAndSelect('request.tutor' , 'tutor')
+                .leftJoin('tutor.user' , 'tutorUser')
+                .innerJoinAndSelect('request.user' , 'user')
+                .leftJoinAndSelect('request.category' , 'category')
+                .select(columnsToSelect)
+                .getMany()
     }
 }
