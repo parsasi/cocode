@@ -54,7 +54,7 @@ export class SessionController {
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('/user')
+    @Get('/tutor')
     async getTutorSession(@Request() req){
         return await this.sessionService.getTutorSession({username : req.user.username})
     }
