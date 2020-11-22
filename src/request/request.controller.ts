@@ -48,4 +48,12 @@ export class RequestController {
         return await this.requestService.getUserRequest({username : req.user.username})
     }
 
+    @UseGuards(JwtAuthGuard)
+    @Get('/tutor')
+    async getTutorRequest(@Request() req){
+        return await this.requestService.getTutorRequest({username : req.user.username})
+    }
+
+
+
 }
