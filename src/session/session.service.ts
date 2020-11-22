@@ -111,11 +111,25 @@ export class SessionService {
 
     //Returns all of the non ended sessions for the tutor with the given username
     async getTutorSession(getTutorSessionServiceDto : GetTutorSessionServiceDto){
+
+        const columnsToSelect = [
+            'session.uuid',
+            'session.startTime',
+            'session.duration',
+            'session.isStarted',
+            'session.rate',
+            'session.codejarAdminUrl',
+            'category.text',
+            'category.photo'
+        ]
+
         return await this.sessionRepository
             .createQueryBuilder('session')
             .innerJoin('session.tutor' , 'tutor')
             .innerJoin('tutor.user' , 'user' , 'user.username = :username' , {username : getTutorSessionServiceDto.username})
+            .leftJoinAndSelect('session.category' , 'category')
             .where('session.isEnded = :isEnded' , {isEnded : false})
+            .select(columnsToSelect)
             .getMany()
     }
      
