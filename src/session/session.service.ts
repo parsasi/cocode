@@ -34,6 +34,10 @@ interface GetSessionsServiceDto {
     username : string
 }
 
+interface GetTutorSessionServiceDto{
+    username : string
+}
+
 @Injectable()
 export class SessionService {
     constructor(
@@ -96,12 +100,23 @@ export class SessionService {
         .getOne()
     }
 
-    async getSessionsWithUser(condition : GetSessionsServiceDto) : Promise<Session[]>{
+    async getSessionsWithUser(getSessionServiceDto : GetSessionsServiceDto) : Promise<Session[]>{
         return await this.sessionRepository
         .createQueryBuilder("session")
-        .where("user.username = :username" , {username : condition.username})
+        .where("user.username = :username" , {username : getSessionServiceDto.username})
         .innerJoinAndSelect("session.attends" , "attend")
         .innerJoin("attend.user" , "user")
         .getMany()
     }
+
+    //Returns all of the non ended sessions for the tutor with the given username
+    async getTutorSession(getTutorSessionServiceDto : GetTutorSessionServiceDto){
+        return await this.sessionRepository
+            .createQueryBuilder('session')
+            .innerJoin('session.tutor' , 'tutor')
+            .innerJoin('tutor.user' , 'user' , 'user.username = :username' , {username : getTutorSessionServiceDto.username})
+            .where('session.isEnded = :isEnded' , {isEnded : false})
+            .getMany()
+    }
+     
 }
