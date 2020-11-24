@@ -80,6 +80,8 @@ export class AttendService {
             "tutorUser.username",
             "tutorUser.firstName",
             "tutorUser.lastName",
+            "category.text",
+            "category.photo"
         ]
 
 
@@ -92,6 +94,7 @@ export class AttendService {
         .leftJoinAndSelect('attend.session' , 'session')
         .leftJoinAndSelect('session.tutor' , 'tutor')
         .leftJoinAndSelect('tutor.user' , 'tutorUser')
+        .leftJoinAndSelect('session.category' , 'category')
         .select(columnsToSelect)
         .getMany()
 
