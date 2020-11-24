@@ -91,23 +91,58 @@ export class SessionService {
 
 
     async getSessionWithUser(condition : GetSessionServiceDto) : Promise<Session>{
-        return await this.sessionRepository
+
+        const columnsToSelect = [
+            "session.uuid",
+            "session.startTime",
+            "session.duration",
+            "session.isStarted",
+            "session.isEnded",
+            "session.rate",
+            "session.codejarPublicUrl"
+        ]
+
+        const data =  await this.sessionRepository
         .createQueryBuilder("session")
-        .where("user.username = :username" , {username : condition.username})
+        .leftJoin("session.attends" , "attend")
+        .innerJoin("attend.user" , "user" , "user.username = :username" , {username : condition.username})
         .where("session.uuid = :uuid" , {uuid : condition.uuid})
-        .innerJoinAndSelect("session.attends" , "attend")
-        .innerJoin("attend.user" , "user")
+        .select(columnsToSelect)
         .getOne()
+
+        return data
     }
 
-    async getSessionsWithUser(getSessionServiceDto : GetSessionsServiceDto) : Promise<Session[]>{
+
+    async getSessionWithTutor(condition : GetSessionServiceDto) : Promise<Session>{
+        const columnsToSelect = [
+            "session.uuid",
+            "session.startTime",
+            "session.duration",
+            "session.isStarted",
+            "session.isEnded",
+            "session.rate",
+            "session.codejarAdminUrl"
+        ]
+
         return await this.sessionRepository
         .createQueryBuilder("session")
-        .where("user.username = :username" , {username : getSessionServiceDto.username})
-        .innerJoinAndSelect("session.attends" , "attend")
-        .innerJoin("attend.user" , "user")
-        .getMany()
+        .leftJoin("session.tutor" , "tutor")
+        .innerJoin("tutor.user" , "user" , "user.username = :username" , {username : condition.username})
+        .where("session.uuid = :uuid" , {uuid : condition.uuid})
+        .select(columnsToSelect)
+        .getOne()
+
     }
+
+    // async getSessionsWithUser(getSessionServiceDto : GetSessionsServiceDto) : Promise<Session[]>{
+    //     return await this.sessionRepository
+    //     .createQueryBuilder("session")
+    //     .where("user.username = :username" , {username : getSessionServiceDto.username})
+    //     .innerJoinAndSelect("session.attends" , "attend")
+    //     .innerJoin("attend.user" , "user")
+    //     .getMany()
+    // }
 
     //Returns all of the non ended sessions for the tutor with the given username
     async getTutorSession(getTutorSessionServiceDto : GetTutorSessionServiceDto){
