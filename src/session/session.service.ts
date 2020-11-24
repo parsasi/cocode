@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Tutor } from '../tutor/tutor.entity'
 import { Category } from '../category/category.entity'
 import { v4 as uuidv4 } from 'uuid'
+import { create } from 'domain';
 
 interface CreateSessionServiceDto {
     startTime : Date,
@@ -30,12 +31,18 @@ interface GetSessionServiceDto {
     username : string
 }
 
-interface GetSessionsServiceDto {
-    username : string
-}
+// interface GetSessionsServiceDto {
+//     username : string
+// }
 
 interface GetTutorSessionServiceDto{
     username : string
+}
+
+interface CreateWorkspaceServiceDto{
+    uuid : string,
+    codejarAdminUrl : string,
+    codejarPublicUrl : string
 }
 
 @Injectable()
@@ -166,6 +173,24 @@ export class SessionService {
             .where('session.isEnded = :isEnded' , {isEnded : false})
             .select(columnsToSelect)
             .getMany()
+    }
+
+    async createWorkspace(createWorkspaceServiceDto : CreateWorkspaceServiceDto , username : string) : Promise<Session>{
+        let session =  await this.sessionRepository
+                    .createQueryBuilder('session')
+                        .innerJoin('session.tutor' , 'tutor')
+                        .innerJoin('tutor.user' , 'user' , 'user.username = :username' , {username})
+                        .where('session.uuid = :uuid' , {uuid : createWorkspaceServiceDto.uuid})
+                        .getOne()
+
+        session = {
+            ...session,
+            codejarAdminUrl : createWorkspaceServiceDto.codejarAdminUrl,
+            codejarPublicUrl : createWorkspaceServiceDto.codejarPublicUrl
+        }
+
+        return await this.sessionRepository.save(session)
+
     }
      
 }

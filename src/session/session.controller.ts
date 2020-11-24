@@ -1,20 +1,21 @@
-import { Controller , Put , Get , Request , UseGuards , Body , HttpStatus , Response , Query, HttpException } from '@nestjs/common'
+import { Controller , Put , Get , Post , Request , UseGuards , Body , HttpStatus , Response , Query, HttpException } from '@nestjs/common'
 import { SessionService } from './session.service'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { StartSessionDto } from './dto/statrSessionDto'
 import { EndSessionDto } from './dto/endSessionDto'
 import { TutorService } from '../tutor/tutor.service'
 import { GetSessionDto } from './dto/getSessionDto'
+import { CodeJarService } from '../code-jar/code-jar.service'
+import { CreateWorkspaceDto } from './dto/createWorkspaceDto'
 
 
 @Controller('session')
 export class SessionController {
     constructor(
         private sessionService : SessionService,
-        private tutorService : TutorService
+        private tutorService : TutorService,
+        private codeJarService : CodeJarService
     ){}
-
-
 
     
     //Gets the info for a session, for its user or tutor
@@ -72,4 +73,20 @@ export class SessionController {
         return await this.sessionService.getTutorSession({username : req.user.username})
     }
 
+
+    @UseGuards(JwtAuthGuard)
+    @Post('/codejar')
+    async createWorkspace(@Body() createWorkspaceDto : CreateWorkspaceDto , @Request() req , @Response() res){
+        const codejarUrl = await this.codeJarService.createWorkspace()
+
+        const workspace = {
+            uuid : createWorkspaceDto.uuid,
+            codejarAdminUrl : codejarUrl.adminUrl,
+            codejarPublicUrl : codejarUrl.publicUrl
+        }
+
+        const insertResult = await this.sessionService.createWorkspace(workspace , req.user.username)
+
+        return  insertResult ?  res.status(HttpStatus.CREATED).send() : res.status(HttpStatus.EXPECTATION_FAILED).send()
+    }
 }

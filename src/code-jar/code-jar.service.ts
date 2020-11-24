@@ -6,15 +6,16 @@ import path = require('path')
 export class CodeJarService {
     async createWorkspace(){
 
-        const baseUrl = 'https://codejar.live'
+        const baseUrl = 'https://codejar.live/'
 
-        const createUrl = path.join(baseUrl , '/ws/create')
+        const createUrl = new URL('/ws/create' , baseUrl)
 
-        const workspace = await (await axios.default.get(createUrl)).data
+
+        const workspace = await (await axios.default.get(createUrl.toString())).data
 
         return {
-            adminUrl : path.join(baseUrl , '/ws', workspace.adminCode),
-            publicUrl : path.join(baseUrl , '/ws' , workspace.publicCode)
+            adminUrl : new URL(`/ws/${workspace.adminCode}`, baseUrl).toString(),
+            publicUrl : new URL(`/ws/${workspace.publicCode}` , baseUrl).toString()
         }
     
     }
