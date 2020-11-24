@@ -4,13 +4,15 @@ import { SessionController } from './session.controller';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Session } from './session.entity'
 import { TutorModule } from '../tutor/tutor.module'
+import { CodeJarModule } from '../code-jar/code-jar.module'
 
 @Module({
   providers: [SessionService],
   controllers: [SessionController],
   imports : [
     TypeOrmModule.forFeature([Session]),
-    TutorModule
+    TutorModule,
+    CodeJarModule
   ],
   exports : [SessionService]
 
