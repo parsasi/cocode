@@ -76,7 +76,13 @@ export class UserController {
 
     @Get('/')
     @UseGuards(JwtAuthGuard)
-    async getProfile(@Query() getUserDto : GetUserDto){
-        return await this.userService.getUser(getUserDto)
+    async getProfile(@Query() getUserDto : GetUserDto  , @Request() req){
+        if('username' in getUserDto){
+            //If the username is passed, return the data for the username passed in
+            return await this.userService.getUser(getUserDto)
+        }else{
+            //If the username is not passed, return the data for the user that's authenticated
+            return  await this.userService.getUser({username : req.user.username})
+        }
     }
 }

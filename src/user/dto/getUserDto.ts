@@ -1,6 +1,6 @@
-import { IsNotEmpty } from 'class-validator'
+import { Allow } from 'class-validator'
 
 export class GetUserDto{
-    @IsNotEmpty()
+    @Allow()
     username : string
 }
