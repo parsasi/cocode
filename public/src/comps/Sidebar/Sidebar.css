@@ -1,0 +1,23 @@
+.navlink{
+    max-width: 130px; 
+    max-height: 20px; 
+    display: inline-flex; 
+    align-items: center; 
+    margin-top: 60px; 
+    font-weight: none; 
+    color: #8DA1B5; 
+    cursor: pointer;
+    user-select: none; 
+    text-decoration: none;
+}
+
+@media (max-width: 1024px) {
+.navlink > img {
+    display: none;
+    }
+}
+
+.navlink.selected{
+    font-weight: bold !important;
+    color: #173F5F !important;
+}
