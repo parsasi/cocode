@@ -11,6 +11,10 @@ nest build
 git init
 git add .
 git add -f dist
+cd ./public
+npm run build
+cd ../
+git add -f public/build
 git commit -m '$commit'
 heroku git:remote -a $remote
 git push -f heroku master

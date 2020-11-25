@@ -1,0 +1,11 @@
+iframe{
+    width:calc(100% - 10px);
+    height:calc(100% - 10px);
+    margin:0 auto;
+    border:none;
+}
+video{
+    width:250px;
+    height:140px;
+    margin:auto 30px;
+}

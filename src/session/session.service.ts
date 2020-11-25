@@ -176,18 +176,20 @@ export class SessionService {
     }
 
     async createWorkspace(createWorkspaceServiceDto : CreateWorkspaceServiceDto , username : string) : Promise<Session>{
-        let session =  await this.sessionRepository
-                    .createQueryBuilder('session')
+        const session =  await this.sessionRepository
+                        .createQueryBuilder('session')
                         .innerJoin('session.tutor' , 'tutor')
                         .innerJoin('tutor.user' , 'user' , 'user.username = :username' , {username})
                         .where('session.uuid = :uuid' , {uuid : createWorkspaceServiceDto.uuid})
                         .getOne()
 
-        session = {
-            ...session,
-            codejarAdminUrl : createWorkspaceServiceDto.codejarAdminUrl,
-            codejarPublicUrl : createWorkspaceServiceDto.codejarPublicUrl
-        }
+        if(!session)
+            throw new HttpException('UNAUTHORIZED' , HttpStatus.UNAUTHORIZED)
+
+        console.log(createWorkspaceServiceDto)
+
+        session.codejarAdminUrl = createWorkspaceServiceDto.codejarAdminUrl
+        session.codejarPublicUrl = createWorkspaceServiceDto.codejarPublicUrl
 
         return await this.sessionRepository.save(session)
 

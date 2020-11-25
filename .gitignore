@@ -33,7 +33,6 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-/public/node_modules
 public/.pnp
 /public/.pnp.js
 
@@ -53,3 +52,9 @@ public/coverage
 
 #Jwt Token
 /src/auth/constant.ts
+
+
+#Front-end
+/public/node_modules
+/public/.env
+/public/build
