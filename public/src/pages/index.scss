@@ -1,0 +1,22 @@
+// .main {
+//     display: inline-flex;
+//     flex-direction: column;
+// }
+
+@mixin fullscreen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.home {
+    @include fullscreen();
+    .row {
+        @include fullscreen();
+        .col{
+            @include center(400);
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}
