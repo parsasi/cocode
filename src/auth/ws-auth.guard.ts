@@ -15,7 +15,6 @@ export class WsGuard implements CanActivate {
     context: any,
   ): boolean | any | Promise<boolean | any> | Observable<boolean | any> {
     const tokenString: string | void = context.args[0].handshake.query['token'];
-    console.log(tokenString)
     if(!tokenString){
         return false;
     }
@@ -25,20 +24,19 @@ export class WsGuard implements CanActivate {
     try {
       const decoded = this.jwtService.verify(bearerToken) as any;
       return new Promise((resolve, reject) => {
-        console.log(decoded)
         return this.userService.getUserByEmailLogin(decoded.email)
         .then(user => {
           if (user) {
+            context.switchToWs().getData().user = user;
             resolve(user);
           } else {
             reject(false);
           }
         })
-        .catch(e => reject(e  ))
+        .catch(e => reject(e))
 
       });
     } catch (e) {
-      console.log(e);
       return false;
     }
   }
