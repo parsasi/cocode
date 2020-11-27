@@ -5,7 +5,7 @@ import { Socket } from 'socket.io'
 
 
 @WebSocketGateway()
-export class WebRtcSignalingGateway implements OnGatewayConnection{
+export class WebRtcSignalingGateway implements OnGatewayConnection , OnGatewayDisconnect{
 
   async handleConnection(socket){
     // const uuid = socket.handshake.query.uuid
@@ -14,17 +14,19 @@ export class WebRtcSignalingGateway implements OnGatewayConnection{
     // }else{
     //   return socket.disconnect();
     // }
-    console.log('Joined room' )
+    console.log('Client joined' )
+  }
+
+  async handleDisconnect(){
+    console.log('Disconnected')
   }
 
 
-  // @UseGuards(WsGuard)
+  @UseGuards(WsGuard)
   @SubscribeMessage('room')
-  handleMessage( @ConnectedSocket() client: Socket, @MessageBody() data): void 
+  handleEvent(@ConnectedSocket() client: Socket, @MessageBody() data): void 
   {   
       console.log('here')
-      console.log(data.id)
-      // client.broadcast.emit('offer' , data)
-      // return 'Hello world!';
+      
   }
 }
