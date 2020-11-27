@@ -27,8 +27,6 @@ export class WebRtcSignalingGateway implements OnGatewayConnection , OnGatewayDi
   handleEvent(@ConnectedSocket() client: Socket, @MessageBody() data): void 
   {   
       console.log('here')
-      console.log(data.id)
-      // client.broadcast.emit('offer' , data)
-      // return 'Hello world!';
+      
   }
 }
