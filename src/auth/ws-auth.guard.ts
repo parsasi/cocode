@@ -14,11 +14,14 @@ export class WsGuard implements CanActivate {
   canActivate(
     context: any,
   ): boolean | any | Promise<boolean | any> | Observable<boolean | any> {
+    console.log('Authenticating the request')
     const tokenString: string | void = context.args[0].handshake.headers.authorization;
     if(!tokenString){
         return false;
     }
     const bearerToken = context.args[0].handshake.headers.authorization.split(' ')[1];
+
+    
     try {
       const decoded = this.jwtService.verify(bearerToken) as any;
       return new Promise((resolve, reject) => {
