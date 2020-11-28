@@ -46,33 +46,28 @@ export default class WebRTC{
         try{
             await this.peerConnection.addIceCandidate(iceCandidate);
         }catch(err){
-            console.error(err)
+            // console.error(err)
         }
     }
 
     async stateChangeEventListener(){
         this.peerConnection.addEventListener('connectionstatechange', async event => {
             if (this.peerConnection.connectionState === 'connected') {
-                this.localStream.getTracks().forEach(track => {
-                    console.log('sending tracks to remote')
-                    this.peerConnection.addTrack(track, this.localStream);
-
-                    //THIS IS WHERE I MESSED UP 
-                    //this.remoteStream is set in track event listener and assigned to the video element here WRONG!!!
-                })
             }
         })
     }
     async trackEventListener(){
         this.peerConnection.addEventListener('track' , async event => {
-            console.log('remote track recieved')
-            this.remoteStream.addTrack(event.track , this.remoteStream)
-            this.setRemoteMedia(this.remoteStream)
+            // console.log('remote track recieved')
+            this.remoteStream.addTrack(event.track)
+            const newStream = this.remoteStream.clone()
+            this.setRemoteMedia(newStream)
         })
     }
 
     async iceCandidateEventListener(){
         this.peerConnection.addEventListener('icecandidate' , event => {
+            // console.log('Ice candidate Found')
             if(event.candidate){
                 this.onIceCandidate(event.candidate)
             }

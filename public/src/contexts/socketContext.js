@@ -1,5 +1,5 @@
 import {createContext} from 'react'
 
-const socketContext = createContext({})
+const socketContext = createContext()
 
 export default socketContext
