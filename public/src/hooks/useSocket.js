@@ -6,12 +6,12 @@ export function useSocket(){
     const socket = useContext(socketContext)
 
     const emit = (eventName , payload) => {
-        socket.emit && socket.emit(eventName , {
+        socket && socket.emit && socket.emit(eventName , {
             ...payload
         })
     }
     const on = (eventName , callback) => {
-        return socket.on && (socket.on(eventName , data => {callback(data)}))
+        return socket && socket.on && (socket.on(eventName , data => {callback(data)}))
     }
     return [emit , on]
 }

@@ -6,9 +6,8 @@ import ExploreBox from '../../comps/Explore'
 import ExploreHTML from '../../comps/HTMLExplore'
 import ExploreCSS from '../../comps/CSSExplore'
 import ExplorePython from '../../comps/PythonExplore'
-import { useUser } from '../../hooks/useUser'
 import Authenticate from '../../comps/Authenticate/Authenticate'
-
+import SocketContextProvier from '../../comps/ContextProviders/SocketContextProvier'
 
 
 const ExplorePageContainer = styled.div`
@@ -43,23 +42,25 @@ const ContentBottom = styled.div`
 `;
 
 export default function ExplorePage() {
-  
-  const [user , ] = useUser()
+
+
 
   return (
     <Authenticate>
-      <ExplorePageContainer>
-        <Sidebar />
-        <ContentTop>
-            <ExploreHTML />
-            <ExploreBox /> 
-        </ContentTop>
-        <ContentBottom>
-          <ExploreCSS /> 
-          <ExplorePython />
-        </ContentBottom>
-        <RightSidebar user={user} />
-      </ExplorePageContainer>
+      <SocketContextProvier>
+        <ExplorePageContainer>
+          <Sidebar />
+          <ContentTop>
+              <ExploreHTML />
+              <ExploreBox /> 
+          </ContentTop>
+          <ContentBottom>
+            <ExploreCSS /> 
+            <ExplorePython />
+          </ContentBottom>
+          <RightSidebar/>
+        </ExplorePageContainer>
+      </SocketContextProvier>
     </Authenticate>
     
   )

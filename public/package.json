@@ -2,6 +2,7 @@
   "name": "cocodefront",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
@@ -27,7 +28,7 @@
     "react-scripts": "4.0.0",
     "react-stars": "^2.2.5",
     "sass": "^1.28.0",
-    "socket.io-client": "^3.0.3",
+    "socket.io-client": "^2.3.0",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },

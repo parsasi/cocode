@@ -1,31 +1,28 @@
 import React , {useState , useEffect} from 'react'
-import SocketContext from '../../contexts/socketContext'
-import * as io from 'socket.io-client'
-import serverUrl from '../../helpers/serverUrl'
+import  * as io from 'socket.io-client'
+import {socketUrl} from '../../helpers/serverUrl'
 import { useToken } from '../../hooks/useToken'
+import socketContext from '../../contexts/socketContext'
 
 export default function SocketContextProvider(props){
 
     const [token] = useToken()
-    
-    const [socket , setSocket] = useState({})
 
-    const serverUrl = 'http://localhost:8080'
+    const [socket , setSocket] = useState()
 
     useEffect(() => {
-        
-        // const socket = io(serverUrl)
-        // socket.use((socket, next) => {
-        //     socket.handshake.headers['authorization'] = token
-        //     return next()
-        // })
-        
-        // setSocket(socket)
-    } , [])
+        const newSocket = io(socketUrl, {
+            query : {
+                token
+            }
+          });
+
+        setSocket(newSocket)
+    }, [])
 
     return (
-        <SocketContext.Provider value={socket}>
+        <socketContext.Provider value={socket}>
             {props.children}
-        </SocketContext.Provider>
+        </socketContext.Provider>   
     )
 }

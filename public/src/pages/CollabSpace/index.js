@@ -48,30 +48,14 @@ export default function CollabSpace() {
 
   
 
-  if(role === 'user'){
-
+  if(role === 'user' || role === 'tutor'){
     return (
       <Authenticate>
         <SocketContextProvider>
           <CollabSpacePage>
             <Sidebar />
             <CollabContent>
-              <VideoCall token={token} uuid={session.uuid} />
-              <CodeJar isTutor={session.isTutor} session={session} />
-            </CollabContent>
-          </CollabSpacePage>
-        </SocketContextProvider>
-      </Authenticate>
-    )
-  }else if(role === 'tutor'){
-
-    return (
-      <Authenticate>
-        <SocketContextProvider>
-          <CollabSpacePage>
-            <Sidebar />
-            <CollabContent>
-              <VideoCall token={token} uuid={session.uuid} />
+              <VideoCall uuid={session.uuid} />
               <CodeJar isTutor={session.isTutor} session={session}  createWorkspace={createWorkspace} />
             </CollabContent>
           </CollabSpacePage>

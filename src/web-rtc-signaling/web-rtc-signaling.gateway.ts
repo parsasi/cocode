@@ -24,10 +24,35 @@ export class WebRtcSignalingGateway implements OnGatewayConnection , OnGatewayDi
 
   @UseGuards(WsGuard)
   @SubscribeMessage('room')
-  handleEvent(@ConnectedSocket() client: Socket, @MessageBody() data : CreateRoomGatewayDto): void 
+  handleRoom(@ConnectedSocket() client: Socket, @MessageBody() data : CreateRoomGatewayDto): void 
   {
       if(data.uuid){
-        client.join(data.uuid , () => console.log(client.rooms))
+        client.join(data.uuid)
+      }
+  }
+
+  @UseGuards(WsGuard)
+  @SubscribeMessage('call')
+  handleCall(@ConnectedSocket() client: Socket, @MessageBody() data ): void 
+  {
+      if(data.uuid){
+        client.in(data.uuid).emit('offer' , data.offer)
+      }
+  }
+  @UseGuards(WsGuard)
+  @SubscribeMessage('answer')
+  handleAnswer(@ConnectedSocket() client: Socket, @MessageBody() data ): void 
+  {
+      if(data.uuid){
+        client.in(data.uuid).emit('answer' , data.answer)
+      }
+  }
+  @UseGuards(WsGuard)
+  @SubscribeMessage('new-ice-candidate')
+  handleIce(@ConnectedSocket() client: Socket, @MessageBody() data ): void 
+  {
+      if(data.uuid){
+        client.in(data.uuid).emit('new-ice-candidate' , data.candidate)
       }
   }
 }
