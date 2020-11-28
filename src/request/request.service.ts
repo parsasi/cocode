@@ -94,7 +94,9 @@ export class RequestService {
             "tutor.profileTitle",
             "tutorUser.firstName",
             "tutorUser.lastName",
-            "tutorUser.username"
+            "tutorUser.username",
+            "category.text",
+            "category.photo"
         ]
 
 
@@ -108,6 +110,7 @@ export class RequestService {
                 .leftJoin('request.user' , 'user')
                 .leftJoinAndSelect('request.tutor' , 'tutor')
                 .innerJoinAndSelect('tutor.user' , 'tutorUser')
+                .leftJoinAndSelect('request.category' , 'category')
                 .select(columnsToSelect)
                 .getMany()
     }
@@ -123,6 +126,7 @@ export class RequestService {
             "user.lastName",
             "user.username",
             "category.text",
+            "category.photo"
         ] 
         
         return await this.requestRepository
