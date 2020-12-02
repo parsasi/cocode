@@ -13,6 +13,7 @@ import { GetTutorVideoDto } from './dto/getTutorVideoDto'
 import { AwsS3Service } from '../aws-s3/aws-s3.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { VerifyFile , ModifyFile } from './helpers/profile-video-filter.helper'
+import { GetTutorsHelperService } from './helpers/get-tutors.helper.service'
 
 @Controller('tutor')
 export class TutorController {
@@ -22,7 +23,8 @@ export class TutorController {
         private tutorService : TutorService,
         private categoryService : CategoryService,
         private tutorSearchHelperService : TutorSearchHelperService,
-        private awsS3Service : AwsS3Service 
+        private awsS3Service : AwsS3Service,
+        private getTutorsHelperService : GetTutorsHelperService
     ){}
     
     @UseGuards(JwtAuthGuard)
@@ -45,6 +47,12 @@ export class TutorController {
             const categories = await this.categoryService.getCategoryForSearch(getTutorDto.category)
             return await this.tutorSearchHelperService.searchTutorWithCategory(categories)
         }   
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/')
+    async getAllTutors() : Promise<Tutor[]>{
+        return await this.getTutorsHelperService.getAllTutors()
     }
 
     @UseGuards(JwtAuthGuard)

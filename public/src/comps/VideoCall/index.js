@@ -34,9 +34,7 @@ export default function VideoCall(props){
     
     const setRemoteMedia = (stream) => {
         const remoteVideoElement = document.querySelector('#remote-video')
-        console.log('New stream:' , stream.id)
         remoteVideoElement.srcObject = stream
-        console.log('Set stream:' , remoteVideoElement.srcObject.id)
     }
 
     const rtcConfig =  {
@@ -56,7 +54,7 @@ export default function VideoCall(props){
     return (
         <Webcams>
             <Webcam1>
-                <video id="local-video" autoPlay preload="auto" playsInline> Start streaming </video>
+                <video id="local-video" muted    autoPlay preload="auto" playsInline> Start streaming </video>
             </Webcam1>
             <Webcam2>
                 <video id="remote-video" autoPlay  preload="auto" playsInline></video>
