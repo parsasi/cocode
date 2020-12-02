@@ -3,6 +3,7 @@ import { Tutor } from './tutor.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository , InsertResult  } from 'typeorm'
 import { User } from '../user/user.entity'
+import { Category } from 'src/category/category.entity';
 
 interface EditTutorServiceDto {
     bioText: string,
@@ -23,6 +24,29 @@ export class TutorService {
         return await this.tutorRepository.findOne({
                     where : {tutor}
         })
+    }
+
+    async getAllTutors() : Promise<Tutor[]>{
+
+        const columnsToSelect = [
+            "tutor.bioText",
+            "tutor.hourlyRate",
+            "tutor.socialUrl",
+            "profileTitle",
+            "user.firstName",
+            "user.lastName",
+            "user.username",
+            "user.profilePhoto",
+            "category.text"
+        ]
+
+
+        return await this.tutorRepository
+            .createQueryBuilder('tutor')
+            .leftJoinAndSelect('tutor.categories' , 'category')
+            .innerJoinAndSelect('tutor.user' , 'user')
+            .select(columnsToSelect)
+            .getMany();
     }
 
     //Gets a list of tutors with their categories and associated user, filtering by categories
