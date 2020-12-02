@@ -5,8 +5,7 @@ import { useToken } from '../../hooks/useToken'
 import getTutorSession from '../../api/session/getTutorSession'
 
 const USTutorTabMain = styled.div`
-    max-width: 246px; 
-    max-height: 176px; 
+    width:100%;
     display: flex; 
     flex-direction: column; 
 

@@ -2,8 +2,8 @@ import React, { useEffect , useState } from 'react'
 import styled from 'styled-components'
 import Authenticate from '../Authenticate/Authenticate'
 import { Link } from 'react-router-dom'
-import SingleRequest from './SingleRequest'
-import getUserRequests from '../../api/request/getUserRequests'
+import SingleTutorRequest from './SingleTutorRequest'
+import getTutorRequests from '../../api/request/getTutorRequests'
 import { useToken } from '../../hooks/useToken'
 import Loading from '../Loading'
 
@@ -63,7 +63,7 @@ const LoadingContainer = styled.div`
     justify-content:center;
 `
 
-const PRTab = () => {
+const PRTutorTab = () => {
 
     const [requests , setRequests] = useState([])
     const [loading , setloading] = useState(true)
@@ -71,7 +71,7 @@ const PRTab = () => {
 
     useEffect(() => {
         async function fetch(){
-            const data = await getUserRequests(token) 
+            const data = await getTutorRequests(token) 
             setRequests(data)
             setloading(false)
         }
@@ -84,7 +84,7 @@ const PRTab = () => {
 
             <Link to="/MySession" style={{ textDecoration: 'none' }} >
                 <PRText>
-                    Pending Requests 
+                    Tutoring Requests 
                     <DDIcon src="/DropdownIcon.png"/>
                 </PRText>
             </Link>
@@ -92,8 +92,8 @@ const PRTab = () => {
             {loading && <LoadingContainer><Loading /></LoadingContainer>}
 
             {requests.length ?
-                requests.map(item => <SingleRequest category={item.category} tutor={item.tutor.user} request={item} />)
-                : <NoItem> No Pending Requests </NoItem>
+                requests.map(item => <SingleTutorRequest category={item.category} user={item.user} request={item} />)
+                : <NoItem> No Requests </NoItem>
             }
             
 
@@ -103,7 +103,6 @@ const PRTab = () => {
     )
 }
 
-PRTab.defaultProps = {
-}
 
-export default PRTab; 
+
+export default PRTutorTab; 
