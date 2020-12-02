@@ -7,11 +7,16 @@ import { UserModule } from '../user/user.module'
 import { CategoryModule } from '../category/category.module'
 import { TutorSearchHelperService } from './helpers/tutor-search.helper.service'
 import { AwsS3Module } from '../aws-s3/aws-s3.module'
+import { GetTutorsHelperService } from './helpers/get-tutors.helper.service'
 
 
 @Module({
   controllers: [TutorController],
-  providers : [TutorSearchHelperService , TutorService],
+  providers : [
+    TutorSearchHelperService,
+    TutorService,
+    GetTutorsHelperService
+  ],
   imports : [
     TypeOrmModule.forFeature([Tutor]),
     forwardRef(() => UserModule),

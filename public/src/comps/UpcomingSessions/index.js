@@ -4,6 +4,8 @@ import SingleSession from './SingleSession';
 import { useToken } from '../../hooks/useToken';
 import getUserAttend from '../../api/attend/getUserAttend';
 import {Link} from 'react-router-dom';
+import Loading from '../Loading'
+import { StepLabel } from '@material-ui/core';
 
 const USTabMain = styled.div`
     max-width: 246px; 
@@ -52,6 +54,12 @@ const NoItem = styled.span`
     font-size:0.9rem;
 `
 
+const LoadingContainer = styled.div`
+    width:100%;
+    display:flex;
+    justify-content:center;
+`
+
 //Filters sessions to those that have not yet been attended to
 const filterAttend = item => !item.isAttended
 
@@ -60,6 +68,8 @@ const USTab = () => {
 
     
     const [attends , setAttends] = useState([])
+    const [loading , setLoading] = useState(true)
+
 
     const [token] = useToken()
 
@@ -67,6 +77,7 @@ const USTab = () => {
         const fetch = async () => {
             const sessionsData = await getUserAttend(token)
             setAttends(sessionsData.filter(filterAttend))
+            setLoading(false)
         }
         fetch() 
     } , [token])
@@ -79,6 +90,7 @@ const USTab = () => {
                 <DDIcon src="/DropdownIcon.png"/>
             </USText></Link>
             
+            {loading && <LoadingContainer><Loading  /></LoadingContainer>}
             {attends.length ?
                  attends.map(item => <SingleSession session={item.session} />)
                 : <NoItem> No Upcoming Sessions </NoItem>    

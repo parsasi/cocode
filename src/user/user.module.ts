@@ -17,7 +17,11 @@ import { ProfilePhotoHelperService } from './helpers/profile-photo.helper.servic
         AwsModule,
         forwardRef(() => TutorModule)
     ],
-    exports : [TypeOrmModule , UserService],
+    exports : [
+        TypeOrmModule,
+        UserService,
+        ProfilePhotoHelperService
+    ],
     providers: [
         UserService,
         ProfilePhotoHelperService,

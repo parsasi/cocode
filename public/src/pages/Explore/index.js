@@ -2,69 +2,42 @@ import React from 'react'
 import styled from "styled-components"
 import Sidebar from '../../comps/Sidebar'
 import RightSidebar from '../../comps/RightSidebar'
-import ExploreBox from '../../comps/Explore'
-import ExploreHTML from '../../comps/HTMLExplore'
-import ExploreCSS from '../../comps/CSSExplore'
-import ExplorePython from '../../comps/PythonExplore'
+import ExploreCategories from '../../comps/ExploreCategories'
 import Authenticate from '../../comps/Authenticate/Authenticate'
 import SocketContextProvier from '../../comps/ContextProviders/SocketContextProvier'
 
 
 const ExplorePageContainer = styled.div`
-  max-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  flex-wrap: wrap;
   background: #F5F5FB;
   padding-bottom: 10px; 
 `;
 
-const ContentTop = styled.div`
-  max-width: 50vw; 
-  max-height: 50vh; 
+const Content = styled.div`
+  width: calc(100vw - 600px); 
   display: flex;
-  margin: auto;
-  margin-top: 25px;
-  margin-left: 520px;
-  margin-bottom: -45px;
-  border-radius: 30px;
+  margin-left: 250px;
+  flex-wrap:wrap;
+  justify-content: space-evenly;
 `;
 
-const ContentBottom = styled.div`
-  max-width: 50vw; 
-  max-height: 50vh; 
-  display: flex;
-  margin: auto;
-  margin-top: 25px;
-  margin-left: 520px;
-  margin-bottom: 25px;
-  border-radius: 30px;
-`;
 
 export default function ExplorePage() {
-
-
 
   return (
     <Authenticate>
       <SocketContextProvier>
         <ExplorePageContainer>
           <Sidebar />
-          <ContentTop>
-              <ExploreHTML />
-              <ExploreBox /> 
-          </ContentTop>
-          <ContentBottom>
-            <ExploreCSS /> 
-            <ExplorePython />
-          </ContentBottom>
+          <Content>
+            <ExploreCategories />
+          </Content>
           <RightSidebar/>
         </ExplorePageContainer>
       </SocketContextProvier>
     </Authenticate>
     
   )
-}
-
-ExplorePage.defaultProps = {
 }

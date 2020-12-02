@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components' 
 import AccountBox from '../Account'
 import PRTab from '../PendingRequests'
+import PRTutorTab from '../PendingTutorRequests/'
 import USTab from '../UpcomingSessions'
 import USTutorTab from '../UpcomingTutorSessions'
 import FSTab from '../FreeSession'
@@ -38,6 +39,10 @@ const AccountBoxContainer = styled.div`
 
 const PRTabContainer = styled.div`
     margin: 0px 0px 20px 0px; 
+    width:80%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
     @media (max-width: 1024px) {
         margin: 0;
@@ -46,6 +51,10 @@ const PRTabContainer = styled.div`
 
 const USTabContainer = styled.div`
     margin: 0px 0px 20px 0px; 
+    width:80%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
     @media (max-width: 1024px) {
         margin: 0;
@@ -76,6 +85,13 @@ const RightSidebar = (props) => {
                 <USTabContainer> 
                     <USTab />
                 </USTabContainer>
+                {
+                    user.tutor ? (
+                        <PRTabContainer> 
+                            <PRTutorTab />
+                        </PRTabContainer>  
+                    ) : null
+                }
                 {
                     user.tutor ? (
                         <USTabContainer> 
