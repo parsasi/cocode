@@ -8,7 +8,7 @@ import { useToken } from '../../hooks/useToken'
 import Loading from '../Loading'
 
 const PRTabMain = styled.div`
-    max-width: 246px; 
+    width:100%;
     max-height: 176px; 
     display: flex; 
     flex-direction: column; 
@@ -22,15 +22,18 @@ const PRTabMain = styled.div`
 `;
 
 const PRText = styled.div`
-    max-width: 200px; 
+    width:100%;
     max-height: 22px; 
     text-align: start;
-    padding-left: 5px;
     font-size: 18px; 
     font-weight: 600; 
     color: #011F3B; 
     margin-bottom: 15px; 
     cursor: pointer;
+    text-align:cetner;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 
     @media (max-width: 1024px) {
         margin-bottom: 0;

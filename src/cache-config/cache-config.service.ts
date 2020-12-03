@@ -9,7 +9,7 @@ export class CacheConfigService implements CacheOptionsFactory {
   ){}
   createCacheOptions(): CacheModuleOptions {
     return  {
-        ttl: 10, 
+        ttl: 1, 
         max: 20,
         store: redisStore,
         host: this.configService.get('redis_host'),

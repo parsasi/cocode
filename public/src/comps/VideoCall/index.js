@@ -21,7 +21,7 @@ export default function VideoCall(props){
     justify-content:center;
     align-items:center;
     ` 
-
+    
     const handleCall = async (e) => {
         await makeOffer()
     }    
@@ -47,7 +47,7 @@ export default function VideoCall(props){
     const {makeOffer} = bootstrapRTC(rtcConfig)
 
     
-    useEffect(() => {
+    useEffect(() => {   
         emit('room' , { uuid : props.uuid})
     } , [emit , on , props.uuid])
 

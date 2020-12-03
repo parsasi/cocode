@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 
 const PRTabContainer = styled.div`
-    max-width: 246px; 
+    width:80%;
     max-height: 48px; 
     display: flex; 
     flex-direction: row; 
@@ -25,7 +25,7 @@ const PRTabLeft = styled.div`
 `; 
 
 const PRTabText = styled.div`
-    min-width: 200px; 
+    min-width: 100%; 
     max-height: 42px; 
     justify-content: center; 
     text-align: start;
