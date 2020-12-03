@@ -8,7 +8,6 @@ import { useToken } from '../../hooks/useToken'
 import Loading from '../Loading'
 
 const PRTabMain = styled.div`
-    max-width: 246px; 
     max-height: 176px; 
     display: flex; 
     flex-direction: column; 

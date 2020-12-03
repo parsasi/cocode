@@ -1,7 +1,10 @@
-import React, {useState} from 'react'; 
-import styled from 'styled-components'; 
+import React, {useState} from 'react' 
+import styled from 'styled-components'
 import DDIcon from '../../public/DropdownIcon.png'
-import {Link} from 'react-router-dom'; 
+import {Link} from 'react-router-dom'
+import { useToken } from '../../hooks/useToken'
+import { useUser } from '../../hooks/useUser'
+import { useHistory } from 'react-router-dom'
 
 const AccountBoxMain = styled.div`
     -webkit-user-select: none;
@@ -68,6 +71,19 @@ const RotateImg = styled.img`
 const AccountBox = (props) => {
     const[expanded, setExpanded] = useState(false)
 
+    const [,setToken] = useToken()
+    const [,setUser] = useUser()
+    const history = useHistory();
+
+
+
+    const logoutHandler = (e) => {
+        e.preventDefault()
+        setToken('')
+        setUser({})
+        history.push('/')
+    }
+
     return <AccountBoxMain>
     <AccountBoxContainer onClick={()=>{
             setExpanded(!expanded);
@@ -80,7 +96,7 @@ const AccountBox = (props) => {
         <Link to="/MyAccount" style={{ textDecoration: 'none' }} ><a>My Account</a></Link>
         <Link to="/EditAccount" style={{ textDecoration: 'none' }} ><a>Account Settings</a></Link>
         <Link to="/MySession" style={{ textDecoration: 'none' }} ><a>My Sessions</a></Link>
-        <Link to="/" style={{ textDecoration: 'none' }} ><a>Log Out</a></Link>
+        <Link to="/" style={{ textDecoration: 'none' }} ><a onClick={logoutHandler}>Log Out</a></Link>
     </ExpandContainer>
 </AccountBoxMain>
 }

@@ -17,10 +17,9 @@ const USTutorTabMain = styled.div`
 const USText = styled.div`
     display:flex;
     justify-content:center;
-    max-width: 200px; 
+    width:100%;
     max-height: 22px; 
-    text-align: start;
-    padding-left: 5px;
+    text-align: center;
     font-size: 18px; 
     font-weight: 600; 
     color: #011F3B; 

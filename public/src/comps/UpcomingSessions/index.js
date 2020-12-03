@@ -8,18 +8,20 @@ import Loading from '../Loading'
 import { StepLabel } from '@material-ui/core';
 
 const USTabMain = styled.div`
-    max-width: 246px; 
+    max-width: 100%; 
     max-height: 176px; 
     display: flex; 
     flex-direction: column; 
-
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    
     @media (max-width: 1024px) {
         margin-right: 20px;
     }   
 `;
 
 const USText = styled.div`
-    max-width: 200px; 
     max-height: 22px; 
     text-align: start;
     padding-left: 5px;
