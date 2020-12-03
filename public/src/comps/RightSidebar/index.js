@@ -39,7 +39,7 @@ const AccountBoxContainer = styled.div`
 
 const PRTabContainer = styled.div`
     margin: 0px 0px 20px 0px; 
-    width:80%;
+    width:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -51,10 +51,8 @@ const PRTabContainer = styled.div`
 
 const USTabContainer = styled.div`
     margin: 0px 0px 20px 0px; 
-    width:80%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+    width:100%;
+    
 
     @media (max-width: 1024px) {
         margin: 0;

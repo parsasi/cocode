@@ -17,7 +17,7 @@ export default function Authenticate(props){
             setUser(userData)
         }
 
-        if(token){
+        if(token && token.trim() !== 'bearer' && token !== ''){
             if(!user.username){
                 fetch()
             }
@@ -29,7 +29,7 @@ export default function Authenticate(props){
     } , [user , setUser])
 
     return (
-        <>
+        <>  
             {props.children}
         </>
     )

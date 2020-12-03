@@ -17,7 +17,7 @@ export default class WebRTC{
     }
 
     async makeOffer(){
-        this.peerConnection.addStream(this.localStream)
+        this.peerConnection.addStream(await this.getUserMedia())
         const offer = await this.peerConnection.createOffer();
         await this.peerConnection.setLocalDescription(offer)
         return offer
@@ -26,7 +26,7 @@ export default class WebRTC{
     async recieveOffer(offer){
         const remoteOffer = new RTCSessionDescription(offer)
         this.peerConnection.setRemoteDescription(remoteOffer)
-        this.peerConnection.addStream(this.localStream)
+        this.peerConnection.addStream(await this.getUserMedia())
         return await this.answerOffer()
     }
 
@@ -39,6 +39,7 @@ export default class WebRTC{
     async recieveAnswer(answer){
         const remoteSingal = new RTCSessionDescription(answer)
         // peerConnection.addStream(await getUserMedia())
+        console.log(this.peerConnection.signalingState)
         await this.peerConnection.setRemoteDescription(remoteSingal)
     }
 

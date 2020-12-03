@@ -22,11 +22,11 @@ const Name = styled.h2`
     margin-left: 20px;
 `;
 
-const ModalBioComp = () =>{
+const ModalBioComp = (props) =>{
 
 return <ModalBioContainer>
-    <ProfileImg src={"/angelamiller.jpg"}/>
-        <Name>Angela Miller</Name>
+    <ProfileImg src={props.tutor.user.profilePhoto}/>
+        <Name>{props.tutor.user.firstName} {props.tutor.user.lastName}</Name>
 </ModalBioContainer>
 }
 

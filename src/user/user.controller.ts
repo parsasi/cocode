@@ -43,7 +43,7 @@ export class UserController {
 
         return userUpdate ? res.status(HttpStatus.OK).send() : res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
     }
-
+    
 
     @Put('/photo')
     @UseGuards(JwtAuthGuard)
